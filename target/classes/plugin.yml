@@ -1,0 +1,6 @@
+name: Castel-Plugin
+version: '1.0-SNAPSHOT'
+main: fr.krishenk.castel.CastelPlugin
+api-version: 1.16
+softdepend: [Essentials, Vault, PlaceholderAPI, WorldEdit, WorldGuard]
+#softdepend: [ SaberFactions, Factions ]

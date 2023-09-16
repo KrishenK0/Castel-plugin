@@ -1,0 +1,111 @@
+#p: '&2' # primary
+#sp: '&9' # Secondary primary
+#desc: '&7' # Used in GUIs
+#s: '&6' # secondary
+#e: '&c' # error
+#es: '&e' # error secondary
+#sep: '&8' # separator
+#ssep: '&7' # secondary separator
+
+prefix: '&6[&eCastel&6] &2'
+
+guild-created: '{player} &7has created the guild {guild}.'
+
+no-guild-reminder: '{$e}Reminder{$sep}: {$es}You haven''t joined a kingdom yet.'
+
+keep-admin-mode: false
+
+inactivity-announce:
+  player: '{$es}%player% {$e}has been kicked due to inactivity.'
+  guild: '{$es}%guild% {$s}has been disbanded due to inactivity.'
+
+tax:
+  kick: '{$e}You didn''t have enough money for your kingdoms taxes, therefore you were kicked out.'
+  reminder: |
+
+    &4&l&nAttention{$sep}: {$e}&lDaily checks will be performed in{$sep}: {$es}%time%
+  total: '{$p}Your kingdom has gained a total of {$s}$%tax% {$p}from collecting taxes.'
+  paid: '{$es}$%tax% {$e}has been withdrawn from your account for your kingdom tax.'
+  excluded-permission: '{$p}You did not pay kingdom taxes because you were excluded.'
+  excluded-new: '{$p}You did not pay kingdom taxes because you were new.'
+  guild:
+    age: '&5Your kingdom did not pay the taxes as it''s new.'
+    paid: |
+      {$p}A total of {$s}$%tax% {$p}kingdom tax has been paid.
+      New Kingdom Bank Balance{$sep}: {$s}$%kingdoms_fancy_bank%
+    kicked: '{$es}%kingdoms_kingdom_name% {$e}kingdom has been kicked out of the nation due to not being able to pay the taxes{$sep}: {$es}%kingdoms_fancy_bank% {$sep}< {$es}$%tax%'
+    disbanded: '{$e}Your kingdom has been disbanded due to not being able to pay the taxes{$sep}: {$es}$%tax%'
+    disbanded-announce: '{$es}%kingdom% {$e}kingdom has been disbanded due to not being able to pay the taxes{$sep}: {$es}%kingdoms_fancy_bank% {$sep}< {$es}$%tax%'
+    kicked-announce: '{$es}%kingdoms_kingdom_name% {$e}kingdom has been kicked out of {$es}%kingdoms_nation_name% {$e}nation due to not being able to pay the taxes{$sep}: {$es}%kingdoms_fancy_bank% {$sep}< {$es}$%tax%'
+  notifications: |
+    {$sep}[&4WARNING{$sep}] {$e}Your kingdom doesn't have enough money &7({$es}%kingdoms_fancy_bank%&7) {$e}in bank to afford taxes for the next billing cycle{$sep}: {$es}%tax%
+    {$e}If the collected taxes from the members are not enough, your kingdom will be disbanded.
+  kick-announce: '{$es}%player% {$e}has been kicked due to not being able to pay the taxes{$sep}: {$es}%tax%'
+  member-paid: '{$s}$%tax% {$p}has been taken from your account for kingdom tax.'
+locations:
+  normal: '{$s}%translated-world%{$sep}, {$s}%x%{$sep}, {$s}%y%{$sep}, {$s}%z%'
+  chunk: '{$s}%translated-world%{$sep}, {$s}%x%{$sep}, {$s}%z%'
+join-leave-messages:
+  join:
+    guild:
+      message: NOPREFIX|{$sep}[{$p}◆{$sep}]{$sep}[%kingdoms_rank_color%%kingdoms_rank_symbol%{$sep}] {$p}%displayname%
+      sound: BLOCK_NOTE_BLOCK_BELL
+    others: NOPREFIX|{$s}%displayname% {$p}has joined the server.
+  leave:
+    guild:
+      message: NOPREFIX|{$sep}[{$e}◆{$sep}]{$sep}[%kingdoms_rank_color%%kingdoms_rank_symbol%{$sep}] {$e}%displayname%
+      sound: BLOCK_NOTE_BLOCK_FLUTE
+    others: NOPREFIX|{$es}%displayname% {$e}has left the server.
+join:
+  invite: "&2You have &6%invites% &2invites. Check them with &6hover:{/k invites,&9Click to open,/k invites}"
+  language:
+    not-supported: |
+      &cThe detected language for your client was {$es}%detected-lang% &cwhich is probably not supported by the plugin or installed by the server.
+      You can change your language later using hover:{{$es}/k language;&9Click to run;|/k language} &ccommand.
+    supported: |
+      &2Your detected language is &6%detected-lang% &8(&6%kingdoms_lang%&8)
+      &8[&9&l!&8] &2If you believe this was a mistake, you can change it with hover:{&6/k language;&9Click to open;/k language} &2command.
+
+command:
+  help:
+    description: '&6Displays all commands'
+    name: 'help'
+    aliases: 'h ? --help /? -h'
+    usage: '{$usage}%command% &9[page]'
+    grouped-header: '&8&m---------------=(&c&l %group% &8)=---------------'
+    negative-pages: '&cThis isn''t a building. You can''t just go to a negative page.'
+    grouped-commands: 'hover:{&8/&2k %cmd% &7- %description%;&8/&2k %cmd%;|/k %cmd%}'
+    footer: 'hover:{&6←;&6Previous Page;/k %command% %previous_page%} %pages%hover:{&6→;&6Next Page;/k %command% %next_page%}'
+    footer-page: 'hover:{&8[&2%number%&8];&6Go to page &2%number%;/k %command% %number%}'
+    footer-current-page: 'hover:{&8[&2&l%number%&8];&2Current Page}'
+    header: '&8&m---------------=(&c&l Kingdoms &6%page%&7/&6%max_pages% &8&m)=---------------'
+    no-more-pages: '&cThere are no more pages to load.'
+    commands: 'hover:{&8/&2k %cmd% &7- %description%;&5%usage%;|/k %cmd%}'
+    bad-start: '&cYou don''t need slash or the main /k command to get the command info.'
+    not-found: '&cCould not find any command matching&8: {$es}%command%'
+    info: |
+      &8------------=( &2%main-name% &8)=------------
+      &7| &2Display Name&8: &9%command-displayname%
+      &7| &2Aliases&8: &9%aliases%
+      &7| &2Description&8: &9%description%
+      &7| &2Usage&8: &9%usage%
+      &7| &2Cooldown&8: &9%cooldown%"
+  kick:
+    name: 'kick'
+    person: '{$e}You''ve been kicked out of {$es}%kingdom% {$e}by {$es}%kicker%'
+    description: '{$s}Kicks a member from your kingdom.'
+    usage: '{$usage}kick {$p}<player> &9[silent]'
+    announce: '{$es}%kicked% {$e}has been kicked out of the kingdom by {$es}%kicker%'
+    self: '{$e}You can''t kick yourself. That''s not physically possible, but I can help you with that. There you go.'
+    self-secondary: '{$e}Please stop trying to kick yourself. If you really wanna try it, give {$es}&l&nhover:{this;Click to open link;@https://www.youtube.com/watch?v=dQw4w9WgXcQ} {$e}a try.'
+    not-in-guild: '{$e}The specified player is not in your kingdom.'
+    elections: '{$e}Can''t kick players during elections.'
+    cant-kick: '{$e}Can''t kick {$es}%kicked%'
+  admin:
+    track:
+      description: '{$s}Shows you the path of messages sent to you'
+      enabled: '&9Tracking Mode{$sep}: {$p}Enabled {$sep}(&7You might not be able to see the path of all messages sent to you{$sep})'
+      disabled: '&9Tracking Mode{$sep}: {$e}Disabled'
+      tracked: |
+        {$p}The following message is sent from {$s}hover:{%path%;&7Click to open the file;/k admin openfile %file%} {$p}at line {$s}%line%
+        {$p}The raw message{$sep}: &fhover:{%r

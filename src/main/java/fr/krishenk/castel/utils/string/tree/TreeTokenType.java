@@ -1,0 +1,10 @@
+package fr.krishenk.castel.utils.string.tree;
+
+public enum TreeTokenType {
+    INDICATOR_VERTICAL_LINE,
+    INDICATOR_HORIZONTAL_LINE,
+    INDICATOR_CORNERS_FIRST,
+    INDICATOR_CORNERS_LAST,
+    INDICATOR_MIDDLE,
+    INDICATOR_PATH_SEPARATOR;
+}

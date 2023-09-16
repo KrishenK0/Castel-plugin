@@ -1,0 +1,217 @@
+#|-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-|#
+#|++++++++++++++++++++++++++++++++++++++++++++++++++++++|#
+#|                   Misc Upgrades                     |#
+#|++++++++++++++++++++++++++++++++++++++++++++++++++++|#
+#|-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-|#
+
+# You'll still need to remove them from the GUI (guis -> structures -> nexus -> misc-upgrades)
+# if you don't want people to upgrade them.
+invasions:
+  enabled: true
+  scaling: 'max(1, lvl) * 5'
+  cost: "(lvl + 1) * 5"
+  refresh-cooldown: "[1hr] / (lvl + 1)"
+  max-level: 5
+  default-level: 0
+invasion-teleportation:
+  enabled: true
+  # This amount is reduced from invasions.yml -> teleportation -> teleport-delay
+  scaling: lvl
+  cost: "(lvl + 1) * 10"
+  max-level: 5
+  default-level: 0
+anti-explosion:
+  enabled: true
+  cost: "(lvl + 1) * 100"
+  max-level: 3 # Increasing this doesn't change anything.
+  default-level: 0
+
+  # It'll throw the blocks in the air!
+  fancy-explosions:
+    enabled: true
+
+    # The options below require a server restart to be applied
+    # due to performance issues.
+    height:
+      min: 0.2
+      max: 1.0
+    spread:
+      min: -1.0
+      max: 1.0
+
+  # When a siege cannon is able to destroy kingdom items (turrets & structures)
+  # should the kingdom item drop or not. If not, the item will be permanently lost.
+  drop-destroyed-kingdom-items: false
+
+  # Auto regenerate the blocks slowly.
+  # This option has its own limitations.
+  auto-regenerate:
+    # Requires a restart to apply.
+    enabled: true
+    # The delay before starting the regeneration in seconds.
+    delay: 2
+    # The interval between each block regeneration in ticks.
+    interval: 1
+anti-trample:
+  enabled: true
+  cost: "(lvl + 1) * 100"
+  max-level: 3 # Increasing this doesn't change anything.
+
+  # Level 3 anti-trample will not protect these animals.
+  blacklisted-animals: [ ]
+
+  default-level: 0
+nexus-guards:
+  enabled: true
+  cost: "(lvl + 1) * 100"
+  max-level: 4
+  # Spawn delay in seconds.
+  spawn-delay: 5
+  default-level: 0
+
+  condition: 'kingdoms_kingdom_is_pacifist || kingdoms_other_kingdom_is_pacifist'
+
+  levels:
+    1:
+      zombies:
+        amount: 2
+        type: ZOMBIE
+        name: "&6%kingdoms_kingdom_name% &cNexus Guard"
+        health: 50
+      skeletons:
+        amount: 1
+        type: SKELETON
+        name: "&6%kingdoms_kingdom_name% &6Nexus Guard"
+        health: 20
+    2:
+      zombies:
+        amount: 3
+        type: ZOMBIE
+        name: "&6%kingdoms_kingdom_name% &cNexus Guard"
+        health: 50
+      skeletons:
+        amount: 3
+        type: SKELETON
+        name: "&6%kingdoms_kingdom_name% &6Nexus Guard"
+        health: 20
+    3:
+      illusioners:
+        amount: 1
+        type: ILLUSIONER
+        name: "&6%kingdoms_kingdom_name% &cNexus Wizard"
+        health: 50
+      vindicators:
+        amount: 3
+        type: VINDICATOR
+        name: "&6%kingdoms_kingdom_name% &6Nexus Butler"
+        health: 20
+    4:
+      illusioners:
+        amount: 1
+        type: ILLUSIONER
+        name: "&6%kingdoms_kingdom_name% &cNexus Wizard"
+        health: 50
+      vindicators:
+        amount: 2
+        type: VINDICATOR
+        name: "&6%kingdoms_kingdom_name% &6Nexus Butler"
+        health: 20
+      vexes:
+        amount: 5
+        type: VEX
+        name: "&6%kingdoms_kingdom_name% &6Nexus Minions"
+        health: 20
+guards:
+  enabled: true
+  cost: "(lvl + 1) * 100"
+  max-level: 2
+  # Spawn delay in seconds.
+  spawn-delay: 5
+  default-level: 0
+
+  condition: 'kingdoms_kingdom_is_pacifist || kingdoms_other_kingdom_is_pacifist'
+
+  levels:
+    1:
+      zombies:
+        amount: 3
+        type: ZOMBIE
+        name: "&6%kingdoms_kingdom_name% &6Guard"
+        health: 50
+      skeletons:
+        amount: 1
+        type: SKELETON
+        name: "&6%kingdoms_kingdom_name% &6Guard"
+        health: 20
+    2:
+      zombies:
+        amount: 3
+        type: ZOMBIE
+        name: "&6%kingdoms_kingdom_name% &6Guard"
+        health: 50
+      skeletons:
+        amount: 1
+        type: SKELETON
+        name: "&6%kingdoms_kingdom_name% &6Guard"
+        health: 20
+insanity:
+  enabled: true
+  cost: "(lvl + 1) * 500"
+  effects:
+    1: [ "STRENGTH, 10, 1" ]
+    2: [ "STRENGTH, 10, 2" ]
+    3: [ "STRENGTH, 10, 3" ]
+  max-level: 3
+  default-level: 0
+glory:
+  enabled: true
+  cost: "(lvl + 1) * 100"
+  # This is currently not used.
+  max-level: 3
+  default-level: 0
+  xp:
+    # The player XP multiplier is protected by an anti-exploit system.
+    # Killing the same player within 5 minutes will just yield the default XP.
+    "lvl >= 3 && type == 'PLAYER' && kingdoms_relation == 'ENEMY'": "xp * 1.5"
+    "lvl >= 2 && (type == 'ZOMBIE' || type == 'SKELETON')": "xp * 2"
+    "type != 'PLAYER'": "xp + (lvl * 5)"
+chest-size:
+  enabled: true
+  scaling: lvl
+  cost: "(lvl + 1) * 100"
+  # You cannot change this to a higher number, otherwise a lot of unexpected errors will spam.
+  max-level: 5
+  default-level: 0
+
+  # Players cannot place these items in their kingdom chest.
+  items:
+    blacklist: true
+    list:
+      emeralds:
+        material: EMERALD
+      emerald-blocks:
+        material: EMERALD_BLOCK
+      something:
+        lore: "CONTAINS:The ultimate thing"
+
+# This upgrade has no scaling. The level number is used in the
+# max-claims equation in claims.yml
+max-claims:
+  enabled: true
+  scaling: 'lvl * 2'
+  cost: "(lvl + 1) * 200"
+  max-level: 10
+  default-level: 0
+max-members:
+  enabled: true
+  cost: "(lvl + 1) * 100"
+  # Each upgrade.
+  scaling: 'lvl * 5'
+  max-level: 10
+  default-level: 0
+max-turrets: # This works per land, it doesn't bypass per turret limits.
+  enabled: true
+  cost: "(lvl + 1) * 10000"
+  scaling: 'lvl' # Used by "misc_upgrades_max_turrets" placeholder inside turrets.yml
+  max-level: 5
+  default-level: 0
