@@ -1,9 +1,8 @@
 package fr.krishenk.castel.utils;
 
-import com.massivecraft.factions.FPlayer;
-import com.massivecraft.factions.FPlayers;
-import com.massivecraft.factions.Faction;
 import fr.krishenk.castel.CastelPlugin;
+import fr.krishenk.castel.constants.group.Guild;
+import fr.krishenk.castel.constants.player.CastelPlayer;
 import fr.krishenk.castel.packet.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -84,32 +83,58 @@ public class PacketReader {
         if (!mKey.toString().equals(CastelPlugin.channel)) return;
         data.readByte();
         String command = data.e(32767);
-        CastelPlugin.getInstance().getLogger().info("COMMAND : " + command);
+        CastelPlugin.getInstance().getLogger().info(ChatColor.GOLD +"COMMAND : " +ChatColor.WHITE + command);
         NMSPacket packet2 = null;
-        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(this.player);
-        Faction faction = fPlayer.getFaction();
+        CastelPlayer cPlayer = CastelPlayer.getCastelPlayer(this.player);
+        Guild guild = cPlayer.getGuild();
+//        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(this.player);
+//        Faction faction = fPlayer.getFaction();
+//        if (command.equals("opengui-faction")) {
+//            String guiName = data.e(32767);
+//            switch (guiName) {
+//                case "main":
+//                    packet2 = new FactionMaSCPacket(fPlayer, faction);
+//                    break;
+//                case "bank":
+//                    packet2 = new FactionBaSCPacket(faction);
+//                    break;
+//                case "flag":
+//                    packet2 = new FactionFlSCPacket(faction);
+//                    break;
+//                case "perm":
+//                    if (faction.getFPlayerLeader() != fPlayer) return;
+//                    packet2 = new FactionPeSCPacket(faction);
+//                    break;
+//            }
+//            CastelPlugin.getInstance().getLogger().info(ChatColor.RED + "SEND BYTE");
+//            packet2.sendTo(player);
+//        } else if (command.equals("changeperm-faction")) {
+//            packet2 = new FactionChangePermCSPacket(faction, fPlayer, data);
+//            if (packet2.isHandlded()) new FactionPeSCPacket(faction).sendTo(player);
+//        }
         if (command.equals("opengui-faction")) {
             String guiName = data.e(32767);
+            System.out.println(ChatColor.YELLOW +"ARG : " +ChatColor.WHITE + guiName);
             switch (guiName) {
                 case "main":
-                    packet2 = new FactionMaSCPacket(fPlayer, faction);
+                    packet2 = new GuildMaSCPacket(cPlayer, guild);
                     break;
                 case "bank":
-                    packet2 = new FactionBaSCPacket(faction);
+                    packet2 = new GuildBaSCPacket(guild);
                     break;
                 case "flag":
-                    packet2 = new FactionFlSCPacket(faction);
+                    packet2 = new GuildFlSCPacket(guild);
                     break;
                 case "perm":
-                    if (faction.getFPlayerLeader() != fPlayer) return;
-                    packet2 = new FactionPeSCPacket(faction);
+                    if (guild.getLeader() != cPlayer) return;
+                    packet2 = new GuildPeSCPacket(guild);
                     break;
             }
             CastelPlugin.getInstance().getLogger().info(ChatColor.RED + "SEND BYTE");
             packet2.sendTo(player);
         } else if (command.equals("changeperm-faction")) {
-            packet2 = new FactionChangePermCSPacket(faction, fPlayer, data);
-            if (packet2.isHandlded()) new FactionPeSCPacket(faction).sendTo(player);
+            packet2 = new GuildChangePermCSPacket(guild, cPlayer, data);
+            if (packet2.isHandlded()) new GuildPeSCPacket(guild).sendTo(player);
         }
         list.remove(packet);
     }

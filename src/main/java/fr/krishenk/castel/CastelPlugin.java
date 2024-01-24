@@ -11,6 +11,7 @@ import fr.krishenk.castel.constants.player.StandardGuildPermission;
 import fr.krishenk.castel.data.CastelDataCenter;
 import fr.krishenk.castel.data.DataManager;
 import fr.krishenk.castel.data.StartupCache;
+import fr.krishenk.castel.dependencies.classpath.BootstrapProvider;
 import fr.krishenk.castel.lang.Config;
 import fr.krishenk.castel.libs.xseries.ReflectionUtils;
 import fr.krishenk.castel.libs.xseries.XMaterial;
@@ -131,6 +132,10 @@ public final class CastelPlugin extends JavaPlugin {
         StandardGuildPermission.init();
         StandardRelationAttribute.init();
         this.loaded = true;
+    }
+
+    public static CastelPlugin getInstance() {
+        return CastelPlugin.instance;
     }
 
     @Override

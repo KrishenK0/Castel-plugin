@@ -22,9 +22,13 @@ public class PacketByteBuffer extends PacketDataSerializer {
         super.d(i);
     }
 
-    void writeVarIntArray(int i) {
-        writeVarInt(1);
-        writeVarInt(i);
+    void writeVarIntArray(int[] array) {
+//        writeVarInt(1);
+//        writeVarInt(i);
+        writeVarInt(array.length);
+        for (int i : array) {
+            writeVarInt(i);
+        }
     }
 
     void writeUUID(UUID uuid) {

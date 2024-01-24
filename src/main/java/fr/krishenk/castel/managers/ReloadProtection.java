@@ -3,6 +3,7 @@ package fr.krishenk.castel.managers;
 import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.libs.xseries.ReflectionUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -63,7 +64,7 @@ public class ReloadProtection implements Listener {
     private static boolean handleReloadCommand(CommandSender player, String cmd) {
         if (!(cmd = cmd.toLowerCase()).startsWith("reload") && !KNOWN_RELOAD_COMMANDS.contains(cmd))
             return false;
-        CastelPlugin.getInstance().getLogger().info("\n&8-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n\n &4&lDo not reload plugins with&e /reload &4&lor external plugins.&r\n &4&lUse their respective commands instead. E.g. &2 &l/c reload&4 &linstead.&r\n &2If you want to reload CastelPlugin, you won't even need to reload in most cases since the plugin\n automatically reloads most configs.\n This action has been blocked by Castel plugin.\n\n&8-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+        CastelPlugin.getInstance().getLogger().info(ChatColor.translateAlternateColorCodes('&', "\n&8-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n\n &4&lDo not reload plugins with&e /reload &4&lor external plugins.&r\n &4&lUse their respective commands instead. E.g. &2 &l/c reload&4 &linstead.&r\n &2If you want to reload CastelPlugin, you won't even need to reload in most cases since the plugin\n automatically reloads most configs.\n This action has been blocked by Castel plugin.\n\n&8-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"));
         return true;
     }
 
