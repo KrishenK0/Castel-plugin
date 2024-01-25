@@ -15,8 +15,8 @@ public class GuildPeSCPacket extends NMSPacket {
         PacketByteBuffer packetByteBuffer = PacketByteBuffer.get();
 
         packetByteBuffer.writeByte(4);
-        packetByteBuffer.writeString(guild.getTag());
-        packetByteBuffer.writeString(new Gson().toJson(guild.getRanks().getRanks()));
+        packetByteBuffer.writeString(guild.getName());
+        packetByteBuffer.writeString(new Gson().toJson(guild.getRanks().getRanks().values()));
         this.rawPacket = new PacketPlayOutCustomPayload(new MinecraftKey(CastelPlugin.channel), packetByteBuffer);
     }
 
