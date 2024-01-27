@@ -43,7 +43,7 @@ public class DataHandlerRank {
             }
             GuildPermission permission = CastelPlugin.getInstance().getPermissionRegistry().getRegistered(ns);
             if (permission == null) {
-                CLogger.info("Unknown permission when parsing data for rank '" + node + "': " + node);
+                CLogger.info("Unknown permission when parsing data for rank '" + node + "': " + node + '(' + ns + ')');
             } else
                 perms.add(permission);
         });

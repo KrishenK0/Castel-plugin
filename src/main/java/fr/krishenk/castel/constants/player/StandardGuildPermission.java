@@ -12,7 +12,6 @@ public class StandardGuildPermission extends GuildPermission {
     public static final StandardGuildPermission BROADCAST = StandardGuildPermission.register("BROADCAST");
     public static final StandardGuildPermission BUILD = StandardGuildPermission.register("BUILD");
     public static final StandardGuildPermission BUILD_OWNED = StandardGuildPermission.register("BUILD_OWNED");
-    public static final StandardGuildPermission NEXUS_BUILD = StandardGuildPermission.register("NEXUS_BUILD");
     public static final StandardGuildPermission CLAIM = StandardGuildPermission.register("CLAIM");
     public static final StandardGuildPermission UNCLAIM = StandardGuildPermission.register("UNCLAIM");
     public static final StandardGuildPermission UNCLAIM_OWNED = StandardGuildPermission.register("UNCLAIM_OWNED");
@@ -23,7 +22,6 @@ public class StandardGuildPermission extends GuildPermission {
     public static final StandardGuildPermission USE = StandardGuildPermission.register("USE");
     public static final StandardGuildPermission HOME = StandardGuildPermission.register("HOME");
     public static final StandardGuildPermission SET_HOME = StandardGuildPermission.register("SET_HOME");
-    public static final StandardGuildPermission INVADE = StandardGuildPermission.register("INVADE");
     public static final StandardGuildPermission INVITE = StandardGuildPermission.register("INVITE");
     public static final StandardGuildPermission KICK = StandardGuildPermission.register("KICK");
     public static final StandardGuildPermission LORE = StandardGuildPermission.register("LORE");
@@ -32,8 +30,6 @@ public class StandardGuildPermission extends GuildPermission {
     public static final StandardGuildPermission TRUCE = StandardGuildPermission.register("TRUCE");
     public static final StandardGuildPermission ENEMY = StandardGuildPermission.register("ENEMY");
     public static final StandardGuildPermission ALLIANCE = StandardGuildPermission.register("ALLIANCE");
-    public static final StandardGuildPermission NEXUS_CHEST = StandardGuildPermission.register("NEXUS_CHEST");
-    public static final StandardGuildPermission OUTPOST = StandardGuildPermission.register("OUTPOST");
     public static final StandardGuildPermission PROTECTION_SIGNS = StandardGuildPermission.register("PROTECTION_SIGNS");
     public static final StandardGuildPermission RELATION_ATTRIBUTES = StandardGuildPermission.register("RELATION_ATTRIBUTES");
     public static final StandardGuildPermission SETTINGS = StandardGuildPermission.register("SETTINGS");
@@ -42,8 +38,6 @@ public class StandardGuildPermission extends GuildPermission {
     public static final StandardGuildPermission INVSEE = StandardGuildPermission.register("INVSEE");
     public static final StandardGuildPermission READ_MAILS = StandardGuildPermission.register("READ_MAILS");
     public static final StandardGuildPermission MANAGE_MAILS = StandardGuildPermission.register("MANAGE_MAILS");
-    public static final StandardGuildPermission STRUCTURES = StandardGuildPermission.register("STRUCTURES");
-    public static final StandardGuildPermission TURRETS = StandardGuildPermission.register("TURRETS");
     public static final StandardGuildPermission VIEW_LOGS = StandardGuildPermission.register("VIEW_LOGS");
     private final Lang deniedMessage = Lang.valueOf("PERMISSIONS_" + this.getNamespace().getKey());
     public StandardGuildPermission(String name) {

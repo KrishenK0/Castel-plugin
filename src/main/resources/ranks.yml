@@ -91,8 +91,8 @@ ranks:
     name: "General"
     material: DIAMOND_BLOCK
     max-claims: -1
-    permissions: [ NEXUS, BUILD, NEXUS_BUILD, HOME, INVADE, NEXUS_CHEST, UNCLAIM, CLAIM, TURRETS, INVITE, KICK, LORE, BROADCAST,
-                   STRUCTURES, SET_HOME, ALLIANCE, TRUCE, ENEMY, MANAGE_RANKS, FLY, WITHDRAW, INTERACT, USE, OUTPOST, NATION,
+    permissions: [ BUILD, HOME, UNCLAIM, CLAIM, INVITE, KICK, LORE, BROADCAST,
+                   SET_HOME, ALLIANCE, TRUCE, ENEMY, MANAGE_RANKS, FLY, WITHDRAW, INTERACT, USE,
                    UPGRADE, MANAGE_MAILS, READ_MAILS, INSTANT_TELEPORT, VIEW_LOGS ]
   knight:
     name: "Knight"
@@ -100,12 +100,12 @@ ranks:
     symbol: "♜"
     material: GOLD_BLOCK
     max-claims: 10
-    permissions: [ NEXUS, BUILD, NEXUS_BUILD, HOME, INVADE, NEXUS_CHEST, UNCLAIM_OWNED, CLAIM, TURRETS, INVITE, WITHDRAW, FLY,
-                   INTERACT, USE, INSTANT_TELEPORT, READ_MAILS, INVSEE ]
+    permissions: [ BUILD, HOME, UNCLAIM_OWNED, CLAIM, INVITE, WITHDRAW, FLY, INTERACT,
+                   USE, INSTANT_TELEPORT, READ_MAILS, INVSEE ]
   member:
     name: "Member"
     color: "&2"
     symbol: "♟"
     material: IRON_BLOCK
     max-claims: 0
-    permissions: [ NEXUS, BUILD, HOME, INVADE, INTERACT, USE, READ_MAILS ]
+    permissions: [ BUILD, HOME, INTERACT, USE, READ_MAILS ]

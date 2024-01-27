@@ -1,44 +1,43 @@
 package fr.krishenk.castel.packet;
 
+import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.constants.group.Guild;
+import fr.krishenk.castel.constants.namespace.Namespace;
 import fr.krishenk.castel.constants.player.CastelPlayer;
+import fr.krishenk.castel.constants.player.GuildPermission;
+import fr.krishenk.castel.constants.player.Rank;
+import fr.krishenk.castel.constants.player.StandardGuildPermission;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 
+import java.util.Set;
+
 public class GuildChangePermCSPacket extends NMSPacket {
     private final Packet<?> rawPacket = null;
-    private final int permissable;
-    private final int relation;
     private final String permAction;
     private final boolean access;
+    private final Rank rank;
 
     public GuildChangePermCSPacket(Guild guild, CastelPlayer cPlayer, PacketDataSerializer data) {
-        this.permissable = data.readInt();
-        this.relation = data.readInt();
+        this.rank = guild.getRanks().get(data.readInt());
         this.permAction = data.e(32767);
         this.access = data.readBoolean();
-        if (guild.getLeader().equals(cPlayer)) {
-            handle(guild);
+
+        if (guild.getLeader().equals(cPlayer) && this.rank.getPriority() >= cPlayer.getRank().getPriority()) {
+            handle();
             this.isHandled(true);
         }
-
     }
 
-    private void handle(Guild guild) {
-        System.out.println("guild = " + guild + ", permissable = " + this.permissable + ", permAction = " + this.permAction + ", access = " + this.access);
-//        guild.setPermission(permissableFromString(this.permissable), PermissableAction.fromString(this.permAction), (!this.access) ? Access.ALLOW : Access.DENY);
-    }
+    private void handle() {
+        Set<GuildPermission> perms =  rank.copyPermissions();
+        StandardGuildPermission perm = (StandardGuildPermission) CastelPlugin.getInstance().getPermissionRegistry().getRegistered(Namespace.fromString(this.permAction));
 
-//    private Permissable permissableFromString(int permissableValue) {
-//        return this.relation == 0 ? getRelationByValue(permissableValue) :  Role.getByValue(permissableValue);
-//    }
-//
-//    private Permissable getRelationByValue(int relationValue) {
-//        for (Relation r : Relation.values()) {
-//            if (r.value == relationValue) return r;
-//        }
-//        return null;
-//    }
+        if (this.access) perms.remove(perm);
+        else perms.add(perm);
+
+        this.rank.setPermissions(perms);
+    }
 
     @Override
     Packet<?> getRowPacket() {
