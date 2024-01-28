@@ -22,30 +22,12 @@ public class SQLDataHandlerProperties {
         return this.associateNamedData;
     }
 
-    public static final String[] ofLocation(String prefix) {
-        return Companion.ofLocation(prefix);
-    }
-
-    public static final String[] ofSimpleLocation(String prefix) {
-        return Companion.ofSimpleLocation(prefix);
-    }
-
-    public static class Companion {
-        public Companion() {}
-
-        public final String[] ofLocation(String prefix) {
-            Object[] views = new String[]{prefix + "_yaw", prefix + "_pitch"};
-            return (String[]) ArrayUtils.addAll(this.ofSimpleLocation(prefix), views);
-        }
     public static String[] ofLocation(String prefix) {
         Object[] views = new String[]{prefix + "_yaw", prefix + "_pitch"};
         return (String[]) ArrayUtils.addAll(ofSimpleLocation(prefix), views);
     }
 
-        public final String[] ofSimpleLocation(@NotNull String prefix) {
-            String[] strings = new String[]{prefix + "_world", prefix + "_x", prefix + "_y", prefix + "_z"};
-            return strings;
-        }
     public static String[] ofSimpleLocation(String prefix) {
+        return new String[]{prefix + "_world", prefix + "_x", prefix + "_y", prefix + "_z"};
     }
 }
