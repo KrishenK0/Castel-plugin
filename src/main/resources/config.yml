@@ -90,7 +90,7 @@ database:
   # It's as if it was copied pasted from somewhere. Hmmm...
   #
   # Troubleshooting: https://github.com/CryptoMorin/KingdomsX/wiki/FAQ#external-databases
-  method: H2
+  method: MariaDB
 
   # The interval in seconds that the auto-saver should
   # save data to the database. It's recommneded to keep

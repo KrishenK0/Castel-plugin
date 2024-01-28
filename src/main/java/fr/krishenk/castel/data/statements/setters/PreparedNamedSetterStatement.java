@@ -2,6 +2,8 @@ package fr.krishenk.castel.data.statements.setters;
 
 import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Unit;
+import com.sun.javafx.geom.transform.GeneralTransform3D;
+import fr.krishenk.castel.CLogger;
 import fr.krishenk.castel.data.CastelGson;
 import fr.krishenk.castel.data.Database;
 import fr.krishenk.castel.data.Pair;
@@ -41,7 +43,7 @@ public class PreparedNamedSetterStatement implements SimplePreparedStatement {
 
     public void addParameterIfNotExist(String parameterName) {
         Objects.requireNonNull(parameterName);
-        if (this.associateNamedData.containsKey(parameterName)) {
+        if (!this.associateNamedData.containsKey(parameterName)) {
             this.addParameter(parameterName);
         }
     }
@@ -66,32 +68,37 @@ public class PreparedNamedSetterStatement implements SimplePreparedStatement {
         return n;
     }
 
-    public void buildStatement(String table, Connection connection) {
-        Objects.requireNonNull(table);
-        Objects.requireNonNull(connection);
+    public void buildStatement(String table, Connection connection) throws SQLException {
+        Objects.requireNonNull(table, "table");
+        Objects.requireNonNull(connection, "connection");
+        if (initialized) return;
+
         StringJoiner parameterNamesJoiner = new StringJoiner(", ");
         StringJoiner preparedParameterJoiner = new StringJoiner(", ");
-        for (String key : this.associateNamedData.keySet()) {
+        for (String key : associateNamedData.keySet()) {
             parameterNamesJoiner.add('`' + key + '`');
             preparedParameterJoiner.add("?");
         }
-        Iterator<Pair<String, Function<Integer, Unit>>> iterator = this.operations.iterator();
-        while (iterator.hasNext()) {
-            String paramName = (String)((Pair)iterator.next()).getKey();
-            if (this.associateNamedData.containsKey(paramName)) continue;
-            this.addParameter(paramName);
-            parameterNamesJoiner.add('`' + paramName + '`');
-            preparedParameterJoiner.add("?");
+        for (Pair<String, Function<Integer, Unit>> operation : operations) {
+            String paramName = (String) ((Pair<?, ?>) operation).getKey();
+            if (!associateNamedData.containsKey(paramName)) {
+                addParameter(paramName);
+                parameterNamesJoiner.add('`' + paramName + '`');
+                preparedParameterJoiner.add("?");
+            }
         }
-
-        String query = Database.upsertStatement(table, parameterNamesJoiner.toString(), preparedParameterJoiner.toString());
+        String parameterNames = parameterNamesJoiner.toString();
+        String preparedParameters = preparedParameterJoiner.toString();
+        String query = Database.upsertStatement(table, parameterNames, preparedParameters);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
-            this.setStatement(preparedStatement);
-        } catch (Throwable e) {
-            e.printStackTrace();
+            setStatement(preparedStatement);
+        } catch (SQLException e) {
+            CLogger.error("Failed to build setter statement with query: " + query);
+            throw e;
         }
-        this.initialized = true;
+        initialized = true;
+
     }
 
     private void setParameters() {
@@ -117,17 +124,16 @@ public class PreparedNamedSetterStatement implements SimplePreparedStatement {
 
     private void nullRemainingParameters() throws SQLException {
         LinkedHashMap<String, Integer> result = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry : this.associateNamedData.entrySet()) {
-            String x = entry.getKey();
-            if (this.setParameters.contains(x)) continue;
-            result.put(entry.getKey(), entry.getValue());
+        this.associateNamedData.forEach((x, value) -> {
+            if (!this.setParameters.contains(x)) result.put(x, value);
+        });
+
+        for (Map.Entry<String, Integer> stringIntegerEntry : result.entrySet()) {
+            this.getStatement().setObject(((Number) stringIntegerEntry.getValue()).intValue(), null);
         }
-        Iterator<Map.Entry<String, Integer>> iterator = result.entrySet().iterator();
-        while (iterator.hasNext()) {
-            this.getStatement().setObject(((Number)iterator.next().getValue()).intValue(), null);
-        }
-        this.setParameters = new HashSet();
+        this.setParameters = new HashSet<>();
     }
+
 
     public void addBatch() {
         this.checkInitialized();
@@ -174,24 +180,30 @@ public class PreparedNamedSetterStatement implements SimplePreparedStatement {
 
     public final void setJson(@NotNull String name, @Nullable JsonElement value) {
         Objects.requireNonNull(name, "name");
-        addOperation(name, index -> {
-            byte[] arr;
-            PreparedStatement preparedStatement = this.getStatement();
-            JsonElement element = value;
-            if (element != null) {
-                String json = CastelGson.toString(element);
-                Charset charset = StandardCharsets.UTF_8;
-                arr = json.getBytes(charset);
-            } else {
-                arr = null;
-            }
-            try {
-                preparedStatement.setBytes(index, arr);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            return null;
-        });
+//         H2
+//        addOperation(name, index -> {
+//            byte[] arr;
+//            PreparedStatement preparedStatement = this.getStatement();
+//            if (value != null) {
+//                String json = CastelGson.toString(value);
+//                Charset charset = StandardCharsets.UTF_8;
+//                arr = json.getBytes(charset);
+//            } else {
+//                arr = null;
+//            }
+//            System.out.println("name= " + name + ", value= " + value + ", arr= " + Arrays.toString(arr));
+//            System.out.println("statement2 (before set)=" + preparedStatement);
+//            try {
+//                preparedStatement.setBytes(index, arr);
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//            System.out.println("after (after set)=" + preparedStatement);
+//            return null;
+//        });
+
+        String stringValue = (value != null) ? CastelGson.toString(value) : null;
+        setString(name, stringValue);
     }
 
     @Override

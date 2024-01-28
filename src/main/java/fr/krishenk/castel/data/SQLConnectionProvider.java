@@ -1,5 +1,6 @@
 package fr.krishenk.castel.data;
 
+import com.zaxxer.hikari.HikariDataSource;
 import fr.krishenk.castel.CLogger;
 import fr.krishenk.castel.CastelPlugin;
 
@@ -47,8 +48,11 @@ public abstract class SQLConnectionProvider {
         public void setDefaultProviderIfNull(Path path) {
             SQLConnectionProvider sqlConnectionProvider;
             if (DEFAULT_PROVIDER != null) return;
-            Path databasePath = path.resolve("data.db");
-            sqlConnectionProvider = new SQLFlatFileConnectionProvider(TABLE_PREFIX, databasePath);
+//            Path databasePath = path.resolve("data.db");
+//            sqlConnectionProvider = new SQLFlatFileConnectionProvider(TABLE_PREFIX, databasePath);
+
+            sqlConnectionProvider = new SQLHikariConnectionProvider(TABLE_PREFIX, new HikariDataSource());
+
             DEFAULT_PROVIDER = sqlConnectionProvider;
         }
     }

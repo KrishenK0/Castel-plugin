@@ -61,12 +61,14 @@ public class Database<K, T extends CastelObject<K>> implements CastelDatabase<K,
         }
     }
     public String processCommands(String line) {
-        line = StringUtils.replace(line, "LONG", "BIGINT");
-        line = StringUtils.replace(line, "FLOAT", "REAL");
-        line = StringUtils.replace(line, "DOUBLE", "DOUBLE PRECISION");
-        line = StringUtils.replace(line, "NVARCHAR", "VARCHAR");
-        line = StringUtils.replace(line, "STRICT", "");
-        return line;
+//        H2
+//        line = StringUtils.replace(line, "LONG", "BIGINT");
+//        line = StringUtils.replace(line, "FLOAT", "REAL");
+//        line = StringUtils.replace(line, "DOUBLE", "DOUBLE PRECISION");
+//        line = StringUtils.replace(line, "NVARCHAR", "VARCHAR");
+//        line = StringUtils.replace(line, "STRICT", "");
+//        return line;
+        return line.replace("UUID", "BINARY(16)").replace("LONG", "BIGINT").replace("STRICT", "");
     }
 
     private static String globalSchemaProcessor(String query) {
@@ -131,7 +133,9 @@ public class Database<K, T extends CastelObject<K>> implements CastelDatabase<K,
         Objects.requireNonNull(table);
         Objects.requireNonNull(parameters);
         Objects.requireNonNull(preparedValues);
-        return "MERGE INTO `" + table + "` (" + parameters + ") VALUES(" + preparedValues + ')';
+//        H2
+//        return "MERGE INTO `" + table + "` (" + parameters + ") VALUES(" + preparedValues + ')';
+        return "REPLACE INTO " + table + " (" + parameters + ") VALUES (" + preparedValues + ')';
     }
 
     /*
@@ -255,7 +259,7 @@ public class Database<K, T extends CastelObject<K>> implements CastelDatabase<K,
     public void save(@NonNull T data) {
         PreparedNamedSetterStatement ps = new PreparedNamedSetterStatement(this.dataHandler.getSqlProperties().getAssociateNamedData());
         try (Connection connection = this.getConnection()) {
-            SQLDataSetterProvider provider = new SQLDataSetterProvider(data.getDataKey(), this.dataHandler.getIdHandler(), connection, this.table, null, false, false, ps);
+            SQLDataSetterProvider<K> provider = new SQLDataSetterProvider<>(data.getDataKey(), this.dataHandler.getIdHandler(), connection, this.table, null, false, false, ps);
             this.dataHandler.save(provider, data);
             ps.buildStatement(this.table, connection);
             ps.execute();

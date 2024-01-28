@@ -3,11 +3,11 @@ package fr.krishenk.castel.data.dataproviders;
 import org.apache.commons.lang.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SQLDataHandlerProperties {
-    public static final Companion Companion = new Companion();
     private final Map<String, Integer> associateNamedData;
 
     public SQLDataHandlerProperties(@NotNull String[] ignorableKeys) {
@@ -37,10 +37,15 @@ public class SQLDataHandlerProperties {
             Object[] views = new String[]{prefix + "_yaw", prefix + "_pitch"};
             return (String[]) ArrayUtils.addAll(this.ofSimpleLocation(prefix), views);
         }
+    public static String[] ofLocation(String prefix) {
+        Object[] views = new String[]{prefix + "_yaw", prefix + "_pitch"};
+        return (String[]) ArrayUtils.addAll(ofSimpleLocation(prefix), views);
+    }
 
         public final String[] ofSimpleLocation(@NotNull String prefix) {
             String[] strings = new String[]{prefix + "_world", prefix + "_x", prefix + "_y", prefix + "_z"};
             return strings;
         }
+    public static String[] ofSimpleLocation(String prefix) {
     }
 }

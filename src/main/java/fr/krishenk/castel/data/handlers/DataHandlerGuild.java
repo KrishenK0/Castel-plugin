@@ -25,7 +25,7 @@ import java.util.*;
 
 public class DataHandlerGuild extends DataHandler<UUID, Guild> {
     private static SQLDataHandlerProperties createSQLDataHandlerProperties() {
-        Object[] arrObj = new Object[]{SQLDataHandlerProperties.Companion.ofLocation("home"), "color", "flag"};
+        Object[] arrObj = new Object[]{SQLDataHandlerProperties.ofLocation("home"), "color", "flag"};
         String[] arrStr = ArrayUtils.mergeObjects(arrObj);
         return new SQLDataHandlerProperties(arrStr);
     }

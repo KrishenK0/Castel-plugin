@@ -15,7 +15,7 @@ import java.util.UUID;
 public class DataHandlerCastelPlayer extends DataHandler<UUID, CastelPlayer> {
 
     public DataHandlerCastelPlayer() {
-        super(StdIdDataType.UUID, new SQLDataHandlerProperties(new String[]{/*"chatChannel", "mapSize_height", "mapSize_width"*/}));
+        super(StdIdDataType.UUID, new SQLDataHandlerProperties(new String[]{"power", "lastPowerCheckup"/*"chatChannel", "mapSize_height", "mapSize_width"*/}));
     }
 
     @Override
@@ -27,7 +27,6 @@ public class DataHandlerCastelPlayer extends DataHandler<UUID, CastelPlayer> {
 //            provider.setString("chatChannel", data.getChatChannel().getDataId());
 //        }
         provider.setLong("joinedAt", data.getJoinedAt());
-        provider.setString("markersType", data.getMarkersType());
         if (Config.Powers.POWER_ENABLED.getManager().getBoolean()) {
             provider.setDouble("power", data.getPower());
             provider.setLong("lastPowerCheckup", data.getLastPowerCheckup());
