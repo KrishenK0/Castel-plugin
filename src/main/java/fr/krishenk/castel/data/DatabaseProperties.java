@@ -2,8 +2,10 @@ package fr.krishenk.castel.data;
 
 import com.zaxxer.hikari.HikariConfig;
 import fr.krishenk.castel.config.CastelConfig;
+import fr.krishenk.castel.lang.Config;
 import fr.krishenk.castel.utils.config.ConfigSection;
 import lombok.NonNull;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -148,15 +150,15 @@ public class DatabaseProperties {
         DatabaseProperties databaseProperties = DEFAULTS;
         databaseProperties.setAddress("localhost");
         databaseProperties.setPort(3306);
-        databaseProperties.setUser(CastelConfig.DATABASE_USERNAME.getManager().getString());
-        databaseProperties.setPassword(CastelConfig.DATABASE_PASSWORD.getManager().getString());
-        databaseProperties.setDatabaseName(CastelConfig.DATABASE_DATABASE.getManager().getString());
+        databaseProperties.setUser(Config.DATABASE_USERNAME.getManager().getString());
+        databaseProperties.setPassword(Config.DATABASE_PASSWORD.getManager().getString());
+        databaseProperties.setDatabaseName(Config.DATABASE_DATABASE.getManager().getString());
         databaseProperties.setUseSSL(true);
         databaseProperties.setVerifyServerCertificate(true);
         databaseProperties.setAllowPublicKeyRetrieval(false);
 
-        ConfigSection dataSourceProperties = CastelConfig.DATABASE_POOL_SETTINGS_PROPERTIES.getManager().getSection().noDefault().getSection();
-        dataSourceProperties.getKeys().forEach(key -> {
+        ConfigurationSection dataSourceProperties = Config.DATABASE_POOL_SETTINGS_PROPERTIES.getManager().getSection();
+        dataSourceProperties.getKeys(true).forEach(key -> {
             Object value = dataSourceProperties.get(key);
             databaseProperties.add(key, value);
         });

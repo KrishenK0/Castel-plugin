@@ -26,7 +26,6 @@ public class SQLHikariConnectionProvider extends SQLConnectionProvider {
         this.hikari.setMaxLifetime(Duration.ofMinutes(30L).toMillis());
         this.hikari.setKeepaliveTime(0);
         this.hikari.setConnectionTimeout(Duration.ofSeconds(5L).toMillis());
-
     }
 
     void applyProperties(HikariConfig hikariConfig, DatabaseProperties databaseProperties) {
@@ -55,7 +54,6 @@ public class SQLHikariConnectionProvider extends SQLConnectionProvider {
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
-
         if (connection == null) throw new IllegalStateException("Unable to get a connection from the pool.");
         return connection;
     }

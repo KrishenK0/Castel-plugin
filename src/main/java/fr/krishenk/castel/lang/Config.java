@@ -19,7 +19,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.io.InputStreamReader;
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -263,17 +263,22 @@ public enum Config implements NewKeyedConfigAccessor, NewEnumConfig {
         XSound.play(player, ERROR_SOUND.getString());
     }
 
+    public static YamlConfiguration loadFile(String filename) {
+        File file = new File(CastelPlugin.getInstance().getDataFolder(), filename);
+        if (!file.exists()) CastelPlugin.getInstance().saveResource(filename, false);
+        return YamlConfiguration.loadConfiguration(file);
+    }
 
     static {
-       MAIN = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("config.yml")));
-       CLAIMS = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("claims.yml")));
-       POWERS = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("powers.yml")));
-       MAP = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("map.yml")));
-       RESOURCE_POINTS = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("resource-points.yml")));
-       RELATIONS = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("relations.yml")));
-       PROTECTION_SIGNS = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("protection-signs.yml")));
-       MISC_UPGRADE = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("misc-upgrades.yml")));
-       RANKS = YamlConfiguration.loadConfiguration(new InputStreamReader(CastelPlugin.getInstance().getResource("ranks.yml")));
+       MAIN = Config.loadFile("config.yml");
+       CLAIMS = Config.loadFile("claims.yml");
+       POWERS = Config.loadFile("powers.yml");
+       MAP = Config.loadFile("map.yml");
+       RESOURCE_POINTS = Config.loadFile("resource-points.yml");
+       RELATIONS = Config.loadFile("relations.yml");
+       PROTECTION_SIGNS = Config.loadFile("protection-signs.yml");
+       MISC_UPGRADE = Config.loadFile("misc-upgrades.yml");
+       RANKS = Config.loadFile("ranks.yml");
     }
 
     @Override

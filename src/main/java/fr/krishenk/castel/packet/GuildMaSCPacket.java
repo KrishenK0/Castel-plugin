@@ -18,14 +18,9 @@ public class GuildMaSCPacket extends NMSPacket {
     private final Packet<?> rawPacket;
 
     public GuildMaSCPacket(CastelPlayer cPlayer, Guild guild) {
-        System.out.println("cPlayer = " + cPlayer + ", guild = " + guild);
         PacketByteBuffer packetByteBuffer = PacketByteBuffer.get();
 
-//        for (Map.Entry<String, Rank> entry : guild.getRanks().getRanks().entrySet())
-//            System.out.println(entry.getKey() + ":" + entry.getValue());
-
         packetByteBuffer.writeByte(1);
-
         packetByteBuffer.writeString(guild.getName());
         packetByteBuffer.writeInt((int) guild.getPower());
         packetByteBuffer.writeInt(Config.Powers.POWER_FACTION_MAX.getManager().getInt());
