@@ -1,5 +1,6 @@
 package fr.krishenk.castel.packet;
 
+import com.google.common.base.Strings;
 import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.constants.group.Guild;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
@@ -15,6 +16,7 @@ public class GuildFlSCPacket extends NMSPacket {
 
         packetByteBuffer.writeByte(3);
         packetByteBuffer.writeString(guild.getName());
+        packetByteBuffer.writeString(Strings.isNullOrEmpty(guild.getFlag()) ? "null" : guild.getFlag());
         this.rawPacket = new PacketPlayOutCustomPayload(new MinecraftKey(CastelPlugin.channel), packetByteBuffer);
     }
 
