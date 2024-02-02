@@ -1,5 +1,6 @@
 package fr.krishenk.castel.packet;
 
+import com.google.common.base.Strings;
 import io.netty.buffer.Unpooled;
 import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 
@@ -36,7 +37,7 @@ public class PacketByteBuffer extends PacketDataSerializer {
     }
 
     void writeString(String string) {
-        super.a(string);
+        super.a(!Strings.isNullOrEmpty(string) ? string : "null");
     }
 
     String readString() {
