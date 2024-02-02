@@ -78,40 +78,15 @@ public class PacketReader {
 
     private void read(PacketPlayInCustomPayload packet, List<Object> list) {
         MinecraftKey mKey = (MinecraftKey) getValue(packet, "tag");
+        if (!mKey.toString().equals(CastelPlugin.channel)) return;
         CastelPlugin.getInstance().getLogger().info( ChatColor.GREEN +"READ : " +ChatColor.WHITE + mKey + " ("+ packet +")");
         PacketDataSerializer data = (PacketDataSerializer) getValue(packet, "data");
-        if (!mKey.toString().equals(CastelPlugin.channel)) return;
         data.readByte();
         String command = data.e(32767);
         CastelPlugin.getInstance().getLogger().info(ChatColor.GOLD +"COMMAND : " +ChatColor.WHITE + command);
         NMSPacket packet2 = null;
         CastelPlayer cPlayer = CastelPlayer.getCastelPlayer(this.player);
         Guild guild = cPlayer.getGuild();
-//        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(this.player);
-//        Faction faction = fPlayer.getFaction();
-//        if (command.equals("opengui-faction")) {
-//            String guiName = data.e(32767);
-//            switch (guiName) {
-//                case "main":
-//                    packet2 = new FactionMaSCPacket(fPlayer, faction);
-//                    break;
-//                case "bank":
-//                    packet2 = new FactionBaSCPacket(faction);
-//                    break;
-//                case "flag":
-//                    packet2 = new FactionFlSCPacket(faction);
-//                    break;
-//                case "perm":
-//                    if (faction.getFPlayerLeader() != fPlayer) return;
-//                    packet2 = new FactionPeSCPacket(faction);
-//                    break;
-//            }
-//            CastelPlugin.getInstance().getLogger().info(ChatColor.RED + "SEND BYTE");
-//            packet2.sendTo(player);
-//        } else if (command.equals("changeperm-faction")) {
-//            packet2 = new FactionChangePermCSPacket(faction, fPlayer, data);
-//            if (packet2.isHandlded()) new FactionPeSCPacket(faction).sendTo(player);
-//        }
         if (command.equals("opengui-faction")) {
             String guiName = data.e(32767);
             System.out.println(ChatColor.YELLOW +"ARG : " +ChatColor.WHITE + guiName);
@@ -130,12 +105,22 @@ public class PacketReader {
                     packet2 = new GuildPeSCPacket(guild);
                     break;
             }
-            CastelPlugin.getInstance().getLogger().info(ChatColor.RED + "SEND BYTE");
-            packet2.sendTo(player);
-        } else if (command.equals("changeperm-faction")) {
-            packet2 = new GuildChangePermCSPacket(guild, cPlayer, data);
-            if (packet2.isHandlded()) new GuildPeSCPacket(guild).sendTo(player);
+        } else if (command.equals("update-faction")) {
+            String param = data.e(32767);
+            System.out.println(ChatColor.YELLOW +"ARG : " +ChatColor.WHITE + param);
+            switch (param) {
+                case "perm":
+                    packet2 = new GuildPeCSPacket(guild, cPlayer, data);
+                    if (packet2.isHandlded()) new GuildPeSCPacket(guild).sendTo(player);
+                    break;
+                case "flag":
+                    packet2 = new GuildFlCSPacket(guild, cPlayer, data);
+                    if (packet2.isHandlded()) new GuildFlSCPacket(guild).sendTo(player);
+                    break;
+            }
         }
+        CastelPlugin.getInstance().getLogger().info(ChatColor.RED + "SEND BYTE");
+        packet2.sendTo(player);
         list.remove(packet);
     }
 
