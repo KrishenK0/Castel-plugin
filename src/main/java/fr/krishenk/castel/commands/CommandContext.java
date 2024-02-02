@@ -200,7 +200,7 @@ public class CommandContext extends SimpleMessenger {
     /**
      * Check if the command sender is a player or not.
      * Send a {@link Lang#COMMANDS_PLAYERS_ONLY} error to the sender if he is not a Player for a commands <b>player only</b>.
-     * @return true if not a player; false if not
+     * @return <b>false</b> if is a player; <b>true</b> if not
      */
     public boolean assertPlayer() {
         if (this.isPlayer()) {
