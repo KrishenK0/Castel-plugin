@@ -12,13 +12,13 @@ import net.minecraft.server.v1_16_R3.PacketDataSerializer;
 
 import java.util.Set;
 
-public class GuildChangePermCSPacket extends NMSPacket {
+public class GuildPeCSPacket extends NMSPacket {
     private final Packet<?> rawPacket = null;
     private final String permAction;
     private final boolean access;
     private final Rank rank;
 
-    public GuildChangePermCSPacket(Guild guild, CastelPlayer cPlayer, PacketDataSerializer data) {
+    public GuildPeCSPacket(Guild guild, CastelPlayer cPlayer, PacketDataSerializer data) {
         this.rank = guild.getRanks().get(data.readInt());
         this.permAction = data.e(32767);
         this.access = data.readBoolean();
