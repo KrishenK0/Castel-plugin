@@ -1,22 +1,15 @@
 package fr.krishenk.castel.packet;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.constants.group.Group;
 import fr.krishenk.castel.constants.group.Guild;
 import fr.krishenk.castel.constants.player.CastelPlayer;
-import fr.krishenk.castel.constants.player.Rank;
-import fr.krishenk.castel.lang.Config;
 import fr.krishenk.castel.utils.ColorUtils;
 import fr.krishenk.castel.utils.PacketUtils;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketPlayOutCustomPayload;
-
-import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 
 public class GuildMaSCPacket extends NMSPacket {
