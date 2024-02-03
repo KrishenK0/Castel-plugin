@@ -9,7 +9,7 @@ import fr.krishenk.castel.constants.player.CastelPlayer;
 import fr.krishenk.castel.constants.player.Rank;
 import fr.krishenk.castel.lang.Config;
 import fr.krishenk.castel.utils.ColorUtils;
-import fr.krishenk.castel.utils.GuildUtils;
+import fr.krishenk.castel.utils.PacketUtils;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketPlayOutCustomPayload;
@@ -30,12 +30,12 @@ public class GuildMaSCPacket extends NMSPacket {
 
         packetByteBuffer.writeString(group.getId().toString());
         packetByteBuffer.writeString(group.getLeaderId().toString());
-        packetByteBuffer.writeString(GuildUtils.getLeaderName(guild));
+        packetByteBuffer.writeString(PacketUtils.GUILD.getLeaderName(guild));
         packetByteBuffer.writeString(group.getName());
         packetByteBuffer.writeString(group.getTag());
         packetByteBuffer.writeLong(group.getSince());
-        packetByteBuffer.writeString(new Gson().toJson(GuildUtils.onlinePlayer(guild)));
-        packetByteBuffer.writeString(new Gson().toJson(GuildUtils.offlinePlayer(guild)));
+        packetByteBuffer.writeString(new Gson().toJson(PacketUtils.GUILD.onlinePlayer(guild)));
+        packetByteBuffer.writeString(new Gson().toJson(PacketUtils.GUILD.offlinePlayer(guild)));
         packetByteBuffer.writeString(new Gson().toJson(guild.getRanks().getRanks().values()));
         packetByteBuffer.writeDouble(group.getPublicHomeCost());
         packetByteBuffer.writeBoolean(group.isHomePublic());
@@ -67,11 +67,11 @@ public class GuildMaSCPacket extends NMSPacket {
 //        packetByteBuffer.writeDouble(guild.getBank());
 //        packetByteBuffer.writeInt((int) guild.getPower());
 //        packetByteBuffer.writeInt(Config.Powers.POWER_FACTION_MAX.getManager().getInt());
-//        packetByteBuffer.writeString(GuildUtils.getLeaderName(guild));
+//        packetByteBuffer.writeString(PacketUtils.getLeaderName(guild));
 //        packetByteBuffer.writeString(guild.getLeaderId().toString());
 //        packetByteBuffer.writeString(new Gson().toJson(guild.getRanks().getRanks().values()));
-//        packetByteBuffer.writeString(new Gson().toJson(GuildUtils.onlinePlayer(guild)));
-//        packetByteBuffer.writeString(new Gson().toJson(GuildUtils.offlinePlayer(guild)));
+//        packetByteBuffer.writeString(new Gson().toJson(PacketUtils.onlinePlayer(guild)));
+//        packetByteBuffer.writeString(new Gson().toJson(PacketUtils.offlinePlayer(guild)));
         packetByteBuffer.writeString(cPlayer.getRank().getName());
 
 

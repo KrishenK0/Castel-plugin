@@ -3,7 +3,7 @@ package fr.krishenk.castel.packet;
 import com.google.gson.Gson;
 import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.constants.group.Guild;
-import fr.krishenk.castel.utils.GuildUtils;
+import fr.krishenk.castel.utils.PacketUtils;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
 import net.minecraft.server.v1_16_R3.Packet;
 import net.minecraft.server.v1_16_R3.PacketPlayOutCustomPayload;
@@ -18,6 +18,7 @@ public class GuildBaSCPacket extends NMSPacket {
         packetByteBuffer.writeByte(2);
         packetByteBuffer.writeString(new Gson().toJson(GuildUtils.onlinePlayer(guild)));
         packetByteBuffer.writeString(new Gson().toJson(GuildUtils.offlinePlayer(guild)));
+        packetByteBuffer.writeString(new Gson().toJson(PacketUtils.GUILD.onlinePlayer(guild)));
         this.rawPacket = new PacketPlayOutCustomPayload(new MinecraftKey(CastelPlugin.channel), packetByteBuffer);
     }
 
