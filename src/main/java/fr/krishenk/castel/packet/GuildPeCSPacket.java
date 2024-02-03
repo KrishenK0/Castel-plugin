@@ -25,7 +25,7 @@ public class GuildPeCSPacket extends NMSPacket {
 
         if (guild.getLeader().equals(cPlayer) && this.rank.getPriority() >= cPlayer.getRank().getPriority()) {
             handle();
-            this.isHandled(true);
+            this.setHandled(true);
         }
     }
 

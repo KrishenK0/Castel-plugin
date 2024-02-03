@@ -114,11 +114,11 @@ public class PacketReader {
             switch (param) {
                 case "perm":
                     packet2 = new GuildPeCSPacket(guild, cPlayer, data);
-                    if (packet2.isHandlded()) new GuildPeSCPacket(guild).sendTo(player);
+                    if (packet2.isHandled()) new GuildPeSCPacket(guild).sendTo(player);
                     break;
                 case "flag":
                     packet2 = new GuildFlCSPacket(guild, cPlayer, data);
-                    if (packet2.isHandlded()) new GuildFlSCPacket(guild).sendTo(player);
+                    if (packet2.isHandled()) new GuildFlSCPacket(guild).sendTo(player);
                     break;
             }
         }

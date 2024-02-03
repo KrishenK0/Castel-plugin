@@ -15,7 +15,7 @@ public class GuildFlCSPacket extends NMSPacket {
         String flag = data.e(32767);
         Bukkit.getScheduler().runTaskLater(CastelPlugin.getInstance(), () -> {
             guild.setFlag(flag, cPlayer);
-            this.isHandled(true);
+            this.setHandled(true);
         }, 0L);
     }
 

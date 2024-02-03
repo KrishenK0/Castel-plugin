@@ -5,15 +5,15 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public abstract class NMSPacket {
-    private boolean handlded = false;
+    private boolean handled = false;
     public void sendTo(Player player) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(getRowPacket());
     }
 
     abstract Packet<?> getRowPacket();
 
-    void isHandled(boolean value) { this.handlded = true; }
+    void setHandled(boolean value) { this.handled = value; }
 
-    public boolean isHandlded() { return this.handlded; }
+    public boolean isHandled() { return this.handled; }
 
 }
