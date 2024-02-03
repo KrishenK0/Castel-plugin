@@ -70,18 +70,15 @@ public class LandEffectsManager implements Listener {
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(CastelPlugin.getInstance(), () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
+                Land land;
                 CastelPlayer cp = CastelPlayer.getCastelPlayer(player);
                 Guild guild = cp.getGuild();
-                if (!cp.isAdmin()) {
-                    Land land = SimpleChunkLocation.of(player.getLocation()).getLand();
-                    if (land != null && land.isClaimed()) {
-                        GuildRelation relation = land.getGuild().getRelationWith(guild);
-                        List<XPotion.Effect> relEffects = effects.get(relation);
-                        Bukkit.getScheduler().runTask(CastelPlugin.getInstance(), () -> {
-                            for (XPotion.Effect effect : relEffects) effect.apply(player);
-                        });
-                    }
-                }
+                if (cp.isAdmin() || (land = SimpleChunkLocation.of(player.getLocation()).getLand()) == null || !land.isClaimed() || !cp.hasGuild()) continue;
+                GuildRelation relation = land.getGuild().getRelationWith(guild);
+                List<XPotion.Effect> relEffects = effects.get(relation);
+                Bukkit.getScheduler().runTask(CastelPlugin.getInstance(), () -> {
+                    for (XPotion.Effect effect : relEffects) effect.apply(player);
+                });
             }
         }, 10L, 200L);
     }
