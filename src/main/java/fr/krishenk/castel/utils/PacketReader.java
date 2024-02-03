@@ -100,6 +100,9 @@ public class PacketReader {
                 case "flag":
                     packet2 = new GuildFlSCPacket(guild);
                     break;
+                case "invite":
+                    packet2 = new GuildInSCPacket(guild);
+                    break;
                 case "perm":
                     if (guild.getLeader() != cPlayer) return;
                     packet2 = new GuildPeSCPacket(guild);
