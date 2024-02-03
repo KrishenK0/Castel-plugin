@@ -28,7 +28,6 @@ public class RelationalCommandProcessor {
         CastelPlayer cp = context.getCastelPlayer();
         Guild guild = cp.getGuild();
         if (!cp.hasPermission(relation.getPermission()))  {
-
             relation.getPermission().sendDeniedMessage(player);
             return CommandResult.FAILED;
         }
@@ -41,9 +40,8 @@ public class RelationalCommandProcessor {
             result = context.fail(context.lang("limit"));
             return result;
         } else {
-            guild = context.getGuild(0);
-            if (guild == null) return CommandResult.FAILED;
-            Guild to = guild;
+            Guild to = context.getGuild(0);
+            if (to == null) return CommandResult.FAILED;
             context.getSettings().other(to);
             if (Objects.equals(guild.getId(), to.getId())) return context.fail(context.lang("self"));
             if (guild.getRelationWith(to) == relation) return context.fail(context.lang("already"));
@@ -112,12 +110,12 @@ public class RelationalCommandProcessor {
         }
     }
 
-    public static final List<String> tabComplete(GuildRelation relation, CommandTabContext context) {
+    public static List<String> tabComplete(GuildRelation relation, CommandTabContext context) {
         if (context.isPlayer()) {
             CastelPlayer cp = context.getCastelPlayer();
             Guild guild = cp.getGuild();
             if (guild != null) {
-                return context.getGuilds(0, (x) -> Objects.equals(guild, Guild.getGuild(x)) && guild.getRelationWith(Guild.getGuild(x)) != relation);
+                return context.getGuilds(0, (x) -> !Objects.equals(guild, Guild.getGuild(x)) && guild.getRelationWith(Guild.getGuild(x)) != relation);
             }
         }
         return Collections.emptyList();
