@@ -101,7 +101,7 @@ public class PacketReader {
                     packet2 = new GuildFlSCPacket(guild);
                     break;
                 case "invite":
-                    packet2 = new GuildInSCPacket(guild);
+                    packet2 = new GuildInSCPacket(guild, cPlayer);
                     break;
                 case "perm":
                     if (guild.getLeader() != cPlayer) return;
@@ -120,9 +120,6 @@ public class PacketReader {
                     packet2 = new GuildFlCSPacket(guild, cPlayer, data);
                     if (packet2.isHandled()) new GuildFlSCPacket(guild).sendTo(player);
                     break;
-                case "require-invite":
-                    packet2 = new GuildRiCSPacket(guild, data);
-                    if (packet2.isHandled()) new GuildInSCPacket(guild).sendTo(player);
             }
         }
         CastelPlugin.getInstance().getLogger().info(ChatColor.RED + "SEND BYTE");
