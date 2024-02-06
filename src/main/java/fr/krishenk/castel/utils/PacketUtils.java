@@ -14,9 +14,11 @@ import java.util.*;
 public class PacketUtils {
 
     public static class Server {
-        public static List<String> onlinePlayer() {
+        public static List<String> listPlayer(CastelPlayer cp) {
             List<String> list = new ArrayList<>();
             for (OfflinePlayer offlinePlayer : CastelPlugin.getInstance().getServer().getOfflinePlayers()) {
+                CastelPlayer castelPlayer = CastelPlayer.getCastelPlayer(offlinePlayer);
+                if (castelPlayer.hasGuild() || cp.equals(castelPlayer)) continue;
                 list.add(offlinePlayer.getName());
             }
             return list;

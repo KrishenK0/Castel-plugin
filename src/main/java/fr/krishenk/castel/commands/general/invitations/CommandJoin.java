@@ -55,8 +55,8 @@ public class CommandJoin extends CastelCommand {
     public @NonNull List<String> tabComplete(@NonNull CommandTabContext context) {
         if (!context.assertPlayer() && !context.assertArgs(1)) {
             CastelPlayer cp = CastelPlayer.getCastelPlayer(context.senderAsPlayer());
-            return cp.hasGuild() ? new ArrayList<>() : TabCompleteManager.getGuilds(context.arg(0));
+            return cp.hasGuild() ? emptyTab() : TabCompleteManager.getGuilds(context.arg(0));
         }
-        return new ArrayList<>();
+        return emptyTab();
     }
 }

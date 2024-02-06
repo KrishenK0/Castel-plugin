@@ -27,15 +27,16 @@ public class JsonElementDataProvider implements DataProvider, SectionableDataSet
 
     @Override
     public @NotNull SectionableDataSetter createSection() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public @NotNull SectionableDataSetter createSection(@NotNull String name) {
         JsonObject object = new JsonObject();
         if (!(this.element instanceof JsonArray)) throw new UnsupportedOperationException();
         ((JsonArray)this.element).add(object);
         return new NamedJsonDataProvider(null, object);
+
+    }
+
+    @Override
+    public @NotNull SectionableDataSetter createSection(@NotNull String name) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

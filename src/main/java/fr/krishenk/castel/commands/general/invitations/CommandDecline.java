@@ -19,33 +19,32 @@ public class CommandDecline extends CastelCommand {
 
     @Override
     public void execute(CommandContext context) {
-        if (!context.assertPlayer()) {
-            Player player = context.senderAsPlayer();
-            CastelPlayer cp = CastelPlayer.getCastelPlayer(player);
-            Map<UUID, GuildInvite> invites = cp.getInvites();
-            if (invites.isEmpty()) {
-                Lang.COMMAND_DECLINE_MULTIPLE_INVITES.sendMessage(player);
-            } else {
-                Guild guild;
-                if (!context.assertArgs(1)) {
-                    if (invites.size() != 1) {
-                        Lang.COMMAND_DECLINE_MULTIPLE_INVITES.sendMessage(player);
-                        return;
-                    }
+        Guild guild;
+        if (context.assertPlayer()) return;
 
-                    Map.Entry<UUID, GuildInvite> inviteEntry = invites.entrySet().iterator().next();
-                    guild = Guild.getGuild(inviteEntry.getKey());
-                } else {
-                    if (context.argEquals(0, "*")) {
-                        declineAll(player);
-                        return;
-                    }
-
-                    guild = context.getGuild(0);
-                    if (guild == null) return;
-                }
-            }
+        Player player = context.senderAsPlayer();
+        CastelPlayer cp = CastelPlayer.getCastelPlayer(player);
+        Map<UUID, GuildInvite> invites = cp.getInvites();
+        if (invites.isEmpty()) {
+            Lang.COMMAND_DECLINE_NO_INVITES.sendMessage(player);
+            return;
         }
+        if (!context.assertArgs(1)) {
+            if (invites.size() != 1) {
+                Lang.COMMAND_DECLINE_MULTIPLE_INVITES.sendMessage(player);
+                return;
+            }
+            Map.Entry<UUID, GuildInvite> inviteEntry = invites.entrySet().iterator().next();
+            guild = Guild.getGuild(inviteEntry.getKey());
+        } else {
+            if (context.argEquals(0, "*")) {
+                CommandDecline.declineAll(player);
+                return;
+            }
+            guild = context.getGuild(0);
+            if (guild == null) return;
+        }
+        CommandDecline.decline(player, guild);
     }
 
     public static void declineAll(Player player) {

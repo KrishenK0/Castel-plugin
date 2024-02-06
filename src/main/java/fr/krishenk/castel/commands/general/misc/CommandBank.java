@@ -51,7 +51,7 @@ public class CommandBank extends CastelCommand {
                         return;
                     }
 
-                    if (!Config.ECONOMY_BANK_WITHDRAW_MIN.getBoolean()) {
+                    if (!Config.ECONOMY_BANK_WITHDRAW_ENABLED.getBoolean()) {
                         Lang.COMMAND_BANK_WITHDRAW_DISABLED.sendError(player);
                         return;
                     }

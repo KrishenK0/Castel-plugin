@@ -108,10 +108,10 @@ public class TabCompleteManager implements TabCompleter {
         CastelCommandHandler.CommandInformation info = CastelCommandHandler.getCommand(LanguageManager.localeOf(sender), args);
         CastelCommand command = info.command;
         if (command == null) {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
         if (!info.hasPermission(sender)) {
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
         String[] commandArguments = info.getCommandArguments(args);
         if (command instanceof CastelParentCommand && args.length == info.cmdIndex) {

@@ -32,7 +32,7 @@ public interface DataSetter {
 
     void setUUID(@Nullable UUID value);
 
-    <V> void setCollection( Collection<? extends V> collection, BiConsumer<SectionCreatableDataSetter, V> elementHandler);
+    <V> void setCollection(Collection<? extends V> collection, BiConsumer<SectionCreatableDataSetter, V> elementHandler);
 
     <K, V> void setMap(Map<K, ? extends V> map, MappingSetterHandler<K, V> handler);
 }
