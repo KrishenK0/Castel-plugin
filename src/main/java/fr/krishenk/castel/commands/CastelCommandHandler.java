@@ -157,6 +157,7 @@ public class CastelCommandHandler implements CommandExecutor {
             new CommandElection();
 //            new CommandMerge();
 //            new CommandNation();
+            new CommandInviteCancel();
             CommandAdmin.setInstance(new CommandAdmin());
             CastelCommandHandler.gatherPermissions();
         }
