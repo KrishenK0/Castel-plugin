@@ -1,6 +1,8 @@
 package fr.krishenk.castel;
 
 import fr.krishenk.castel.commands.CastelCommandHandler;
+import fr.krishenk.castel.constants.group.model.logs.AuditLogRegistry;
+import fr.krishenk.castel.constants.group.model.logs.StandardAuditLogRegister;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelation;
 import fr.krishenk.castel.constants.group.model.relationships.RelationAttributeRegistry;
 import fr.krishenk.castel.constants.group.model.relationships.StandardRelationAttribute;
@@ -29,6 +31,7 @@ import fr.krishenk.castel.managers.land.LandProtectionManager;
 import fr.krishenk.castel.managers.land.claiming.AutoClaimManager;
 import fr.krishenk.castel.managers.land.protection.*;
 import fr.krishenk.castel.managers.logger.CastelLogger;
+import fr.krishenk.castel.managers.logger.LogManager;
 import fr.krishenk.castel.managers.mails.MailUserAgent;
 import fr.krishenk.castel.managers.protectionsign.ProtectionSignManager;
 import fr.krishenk.castel.managers.teleportation.TpManager;
@@ -79,7 +82,11 @@ public final class CastelPlugin extends JavaPlugin {
     private final GuildPermissionRegistry permissionRegistry = new GuildPermissionRegistry();
     private final RelationAttributeRegistry relationAttributeRegistry = new RelationAttributeRegistry();
     private final CastelMetadataRegistry metadataRegistry = new CastelMetadataRegistry();
+    private final AuditLogRegistry auditLogRegistry = new AuditLogRegistry();
 
+    public AuditLogRegistry getAuditLogRegistry() {
+        return auditLogRegistry;
+    }
 
     public CastelPlugin() {
         if (instance != null || this.enabled)
@@ -131,6 +138,7 @@ public final class CastelPlugin extends JavaPlugin {
         }
         StandardGuildPermission.init();
         StandardRelationAttribute.init();
+        StandardAuditLogRegister.registerAll();
         this.loaded = true;
     }
 
@@ -273,7 +281,7 @@ public final class CastelPlugin extends JavaPlugin {
     public void registerAllEvents() {
         // TODO : A faire
         GeneralizedEventWatcher.init();
-//        this.registerEvent(new LogManager());
+        this.registerEvent(new LogManager());
         this.registerEvent(new ReloadProtection());
 //        this.registerEvent(new InteractiveGUIManager());
         this.registerEvent(new JoinAndLeaveManager());
