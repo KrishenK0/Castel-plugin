@@ -32,6 +32,8 @@ public class GuildLeaderChangeEvent extends CastelEvent implements Cancellable, 
         return reason;
     }
 
+    public CastelPlayer getOldLeader() { return this.guild.getLeader(); }
+
     public CastelPlayer getNewLeader() {
         return newLeader;
     }
