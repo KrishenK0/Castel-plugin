@@ -68,8 +68,9 @@ public class CastelCommandHandler implements CommandExecutor {
         private static void unregisterPermissions(Collection< CastelCommand > commands) {
             for (CastelCommand cmd : commands) {
                 cmd.unregisterPermissions();
-                if (!(cmd instanceof CastelParentCommand)) continue;
-                CastelCommandHandler.unregisterPermissions(((CastelParentCommand) cmd).getChildren(SupportedLanguage.EN));
+                if (cmd instanceof CastelParentCommand) {
+                    unregisterPermissions(((CastelParentCommand) cmd).getChildren(SupportedLanguage.EN));
+                }
             }
         }
 
@@ -87,7 +88,7 @@ public class CastelCommandHandler implements CommandExecutor {
             HELP_COMMAND = new CommandHelp();
             new CommandAbout();
 //            new CommandUpdates();
-//            new CommandReload();
+            new CommandReload();
             new CommandCreate();
             new CommandRename();
             new CommandTag();
