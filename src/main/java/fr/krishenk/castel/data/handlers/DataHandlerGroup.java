@@ -1,10 +1,15 @@
 package fr.krishenk.castel.data.handlers;
 
+import fr.krishenk.castel.CLogger;
 import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.constants.group.Group;
+import fr.krishenk.castel.constants.group.model.logs.AuditLog;
+import fr.krishenk.castel.constants.group.model.logs.AuditLogProvider;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelation;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelationshipRequest;
 import fr.krishenk.castel.constants.group.model.relationships.RelationAttribute;
+import fr.krishenk.castel.constants.land.DeserializationContext;
+import fr.krishenk.castel.constants.land.SerializationContext;
 import fr.krishenk.castel.constants.namespace.Namespace;
 import fr.krishenk.castel.constants.player.Rank;
 import fr.krishenk.castel.constants.player.RankMap;
@@ -61,10 +66,7 @@ public class DataHandlerGroup {
         provider.get("relationshipRequests").setMap(data.getRelationshipRequests(), DataHandlerGroup::saveRelationhipRequests);
         provider.get("relations").setMap(data.getRelations(), DataHandlerGroup::saveRelation);
 
-        //SectionableDataSetter sectionableDataSetter8 = provider.get("logs");
-        //LinkedList<AuditLog> linkedList = data.getLogs();
-        //Objects.requireNonNull(linkedList, "data.logs");
-        //sectionableDataSetter8.setCollection(linkedList, DataHandlerGroup::saveAuditLogs);
+        provider.get("logs").setCollection(data.getLogs(), DataHandlerGroup::saveAuditLogs);
         DataHandlerMetadata.serializeMetadata(provider, data);
     }
 
@@ -107,8 +109,14 @@ public class DataHandlerGroup {
         dataHolder.setAttributes(data.get("attributes").asMap(new QuickEnumMap<>(GuildRelation.values()), DataHandlerGroup::loadAttributes));
         dataHolder.setRelationshipRequests(data.get("relationshipRequests").asMap(new HashMap<>(), DataHandlerGroup::loadRelationshipRequests));
         dataHolder.setRelations(data.get("relations").asMap(new HashMap<>(), DataHandlerGroup::loadRelations));
-        //dataHolder.setLogs(data.get("logs").asCollection(new LinkedList<>(), (arg0, arg1) -> DataHandlerGroup.load$lambda-18$lambda-17(dataHolder, arg0, arg1)))
+        dataHolder.setLogs(data.get("logs").asCollection(new LinkedList<>(), (logs, provider) -> DataHandlerGroup.loadLogs(dataHolder, logs, provider)));
         return dataHolder;
+    }
+
+    private static void saveAuditLogs(SectionCreatableDataSetter provider, AuditLog log) {
+        SectionableDataSetter section = provider.createSection();
+        section.setString("namespace", log.getProvider().getNamespace().asNormalizedString());
+        log.serialize(new SerializationContext<>(section));
     }
 
     private static void saveRank(String key, MappedIdSetter keyProvider, Rank value) {
@@ -187,12 +195,29 @@ public class DataHandlerGroup {
         }
     }
 
-    /*
-    private static void saveAuditLogs(SectionCreatableDataSetter elementProvider, AuditLog element) {
-        SectionableDataSetter sectionCreatableDataSetter = elementProvider.createSection();
-        sectionCreatableDataSetter.setString("namespace", element.getProvider().getNamespace().asNormalizedString());
-        element.serialize(new SerializationContext<DataSetter>(elementProvider));
-    }*/
+    private static void loadLogs(DataHolder holder, LinkedList logs, SectionableDataGetter element) {
+        Namespace namespace;
+        try {
+            namespace = Namespace.fromString(element.getString("namespace"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        AuditLogProvider provider = CastelPlugin.getInstance().getAuditLogRegistry().getRegistered(namespace);
+        if (provider == null) {
+            CLogger.warn("No log provider found for '" + namespace + "' in guild: " + holder.getName());
+            return;
+        }
+        try {
+            AuditLog log = provider.construct();
+            log.deserialize(new DeserializationContext<>(element));
+            logs.add(log);
+        } catch (SQLException e) {
+            CLogger.warn("Error while deserializing " + namespace.asString() + " log: ");
+            e.printStackTrace();
+        }
+    }
+
 
     public static class DataHolder {
         private UUID leader;
@@ -209,12 +234,21 @@ public class DataHandlerGroup {
         private long resourcePoints;
         private String tax;
         private String flag;
+        private LinkedList<AuditLog> logs;
         private Map<UUID, GuildRelationshipRequest> relationshipRequests;
         private Map<UUID, GuildRelation> relations;
         private Map<GuildRelation, Set<RelationAttribute>> attributes;
         private boolean requiresInvite;
         private boolean permanent;
         private boolean hidden;
+
+        public void setLogs(LinkedList<AuditLog> logs) {
+            this.logs = logs;
+        }
+
+        public LinkedList<AuditLog> getLogs() {
+            return logs;
+        }
 
         public String getName() {
             if (this.name != null) return name;

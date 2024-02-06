@@ -91,7 +91,7 @@ public class TimeUtils {
         LocalDateTime now = LocalDateTime.now(zoneId);
         long difference = timeUnit.between(now, until = (localTime = LocalTime.parse(time)).atDate(now.toLocalDate()));
         if (difference <= 0L) {
-            until = until.plus(1L, ChronoUnit.DAYS);
+            until = until.plusDays(1L);
             difference = timeUnit.between(now, until);
         }
         return difference * 20L;
@@ -109,7 +109,7 @@ public class TimeUtils {
     }
 
     public static Long parseTime(String time, TimeUnit timeUnit) {
-        if (Strings.isNullOrEmpty((String)time)) {
+        if (Strings.isNullOrEmpty(time)) {
             return null;
         }
         int len = time.length();
@@ -152,9 +152,9 @@ public class TimeUtils {
     }
 
     static {
-        Arrays.asList("d", "day", "days").forEach(x -> TIME_UNITS.put((String)x, TimeUnit.DAYS));
-        Arrays.asList("h", "hr", "hrs", "hour", "hours").forEach(x -> TIME_UNITS.put((String)x, TimeUnit.HOURS));
-        Arrays.asList("m", "min", "mins", "minute", "minutes").forEach(x -> TIME_UNITS.put((String)x, TimeUnit.MINUTES));
-        Arrays.asList("s", "sec", "secs", "second", "seconds").forEach(x -> TIME_UNITS.put((String)x, TimeUnit.SECONDS));
+        Arrays.asList("d", "day", "days").forEach(x -> TIME_UNITS.put(x, TimeUnit.DAYS));
+        Arrays.asList("h", "hr", "hrs", "hour", "hours").forEach(x -> TIME_UNITS.put(x, TimeUnit.HOURS));
+        Arrays.asList("m", "min", "mins", "minute", "minutes").forEach(x -> TIME_UNITS.put(x, TimeUnit.MINUTES));
+        Arrays.asList("s", "sec", "secs", "second", "seconds").forEach(x -> TIME_UNITS.put(x, TimeUnit.SECONDS));
     }
 }

@@ -4,6 +4,7 @@ import fr.krishenk.castel.CLogger;
 import fr.krishenk.castel.abstraction.GuildOperator;
 import fr.krishenk.castel.abstraction.ImmutableLocation;
 import fr.krishenk.castel.constants.group.model.InviteCode;
+import fr.krishenk.castel.constants.group.model.logs.AuditLog;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelation;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelationshipRequest;
 import fr.krishenk.castel.constants.group.model.relationships.RelationAttribute;
@@ -57,8 +58,8 @@ public class Guild extends Group implements GuildOperator {
     private boolean pacifist;
     private int maxLandsModifier;
 
-    public Guild(UUID id, UUID leader, String name, String tag, long since, Set<UUID> members, RankMap ranks, long resourcePoints, Location home, boolean publicHome, Color color, double bank, String tax, String flag, Map<UUID, GuildRelationshipRequest> relationshipRequests, Map<UUID, GuildRelation> relations, Map<GuildRelation, Set<RelationAttribute>> attributes, boolean requiresInvite, Set<UUID> mails, boolean permanent, Set<SimpleChunkLocation> lands, Map<Powerup, Integer> powerups, Map<String, InviteCode> inviteCodes, Map<UUID, Long> challenges, Map<Integer, ItemStack> chestItems, String lore, boolean pacifist, int maxLandsModifier, Map<MiscUpgrade, Integer> miscUpgrades) {
-        super(id, leader, name, tag, since, members, ranks, resourcePoints, home, publicHome, color, bank, tax, flag, relationshipRequests, relations, attributes, requiresInvite, mails, permanent);
+    public Guild(UUID id, UUID leader, String name, String tag, long since, Set<UUID> members, RankMap ranks, long resourcePoints, Location home, boolean publicHome, Color color, double bank, String tax, String flag, Map<UUID, GuildRelationshipRequest> relationshipRequests, Map<UUID, GuildRelation> relations, Map<GuildRelation, Set<RelationAttribute>> attributes, boolean requiresInvite, Set<UUID> mails, boolean permanent, LinkedList<AuditLog> logs, Set<SimpleChunkLocation> lands, Map<Powerup, Integer> powerups, Map<String, InviteCode> inviteCodes, Map<UUID, Long> challenges, Map<Integer, ItemStack> chestItems, String lore, boolean pacifist, int maxLandsModifier, Map<MiscUpgrade, Integer> miscUpgrades) {
+        super(id, leader, name, tag, since, members, ranks, resourcePoints, home, publicHome, color, bank, tax, flag, relationshipRequests, relations, attributes, requiresInvite, mails, permanent, logs);
         this.miscUpgrades = miscUpgrades;
         this.inviteCodes = inviteCodes;
         this.challenges = challenges;

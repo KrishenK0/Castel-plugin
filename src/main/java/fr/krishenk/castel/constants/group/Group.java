@@ -1,5 +1,6 @@
 package fr.krishenk.castel.constants.group;
 
+import fr.krishenk.castel.constants.group.model.logs.AuditLog;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelation;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelationshipRequest;
 import fr.krishenk.castel.constants.group.model.relationships.RelationAttribute;
@@ -12,20 +13,26 @@ import fr.krishenk.castel.constants.player.Rank;
 import fr.krishenk.castel.constants.player.RankMap;
 import fr.krishenk.castel.data.Pair;
 import fr.krishenk.castel.events.general.*;
+import fr.krishenk.castel.lang.Config;
 import fr.krishenk.castel.managers.ResourcePointManager;
 import fr.krishenk.castel.managers.mails.DraftMail;
 import fr.krishenk.castel.utils.internal.nonnull.NonNullMap;
+import fr.krishenk.castel.utils.time.TimeUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.awt.*;
+import java.time.Duration;
 import java.util.List;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public abstract class Group extends CastelObject<UUID> {
@@ -46,15 +53,16 @@ public abstract class Group extends CastelObject<UUID> {
     protected Map<UUID, GuildRelationshipRequest> relationshipRequests;
     protected Map<UUID, GuildRelation> relations;
     protected Map<GuildRelation, Set<RelationAttribute>> attributes;
+    private transient long lastLogsExpirationCheck;
     protected long resourcePoints;
     protected boolean requiresInvite;
     protected boolean permanent;
     protected boolean hidden;
     private final Set<UUID> mails;
-    //private final LinkedList<AuditLog> logs;
+    private final LinkedList<AuditLog> logs;
 
 
-    public Group(UUID id, UUID leader, String name, String tag, long since, Set<UUID> members, RankMap ranks, long resourcePoints, Location home, boolean publicHome, Color color, double bank, String tax, String flag, Map<UUID, GuildRelationshipRequest> relationshipRequests, Map<UUID, GuildRelation> relations, Map<GuildRelation, Set<RelationAttribute>> attributes, boolean requiresInvite, Set<UUID> mails, boolean permanent) {
+    public Group(UUID id, UUID leader, String name, String tag, long since, Set<UUID> members, RankMap ranks, long resourcePoints, Location home, boolean publicHome, Color color, double bank, String tax, String flag, Map<UUID, GuildRelationshipRequest> relationshipRequests, Map<UUID, GuildRelation> relations, Map<GuildRelation, Set<RelationAttribute>> attributes, boolean requiresInvite, Set<UUID> mails, boolean permanent, LinkedList<AuditLog> logs) {
         super(new HashMap<>());
         this.id = id;
         this.leader = leader;
@@ -76,6 +84,7 @@ public abstract class Group extends CastelObject<UUID> {
         this.requiresInvite = requiresInvite;
         this.mails = Objects.requireNonNull(mails, "Mails cannot be null");
         this.permanent = permanent;
+        this.logs = Objects.requireNonNull(logs,"logs cannot be null");
     }
 
     public Group(UUID leader, String name) {
@@ -92,6 +101,7 @@ public abstract class Group extends CastelObject<UUID> {
         this.relations = new HashMap<>();
         this.mails = new LinkedHashSet<>();
         this.relationshipRequests = new HashMap<>();
+        this.logs = new LinkedList<>();
     }
 
     public double getPublicHomeCost() {
@@ -430,6 +440,41 @@ public abstract class Group extends CastelObject<UUID> {
             group.mails.add(mail.getId());
         }
         return mail;
+    }
+
+    public void log(AuditLog log) {
+//        if (Config.AUDIT_)
+        this.logs.add(log);
+    }
+
+    public LinkedList<AuditLog> getLogs() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - this.lastLogsExpirationCheck < Duration.ofHours(1L).toMillis()) {
+            return this.logs;
+        }
+        final long defaultExpiration = Config.AUDIT_LOGS_EXPIRATION_DEFAULT.getTimeMillis();
+        final ConfigurationSection specifics = Config.AUDIT_LOGS_EXPIRATION.getSection();
+        for (Iterator<AuditLog> iterator = this.logs.iterator(); iterator.hasNext(); ) {
+            AuditLog log = iterator.next();
+            Long expirationTime = TimeUtils.parseTime(specifics.getString(log.getProvider().getNamespace().getConfigOptionName()));
+            if (expirationTime == null) expirationTime = defaultExpiration;
+            final long time = log.getTime();
+            final long diff = currentTime - time;
+            if (diff >= expirationTime) iterator.remove();
+        }
+        this.lastLogsExpirationCheck = currentTime;
+        return this.logs;
+    }
+
+    public <C extends AuditLog, T> T getNewestLog(final Class<C> base, final Function<C, T> transformer) {
+        final Iterator<AuditLog> descending = this.logs.descendingIterator();
+        while (descending.hasNext()) {
+            final AuditLog log = descending.next();
+            if (!base.isInstance(log)) continue;
+            final T result = transformer.apply((C) log);
+            if (result != null) return result;
+        }
+        return null;
     }
 
     public List<Mail> getSentMails() {

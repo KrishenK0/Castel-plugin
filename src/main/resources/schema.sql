@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `{PREFIX}lands` (
     `relationshipRequests` JSON NULL,
     `relations` JSON NULL,
     `attributes` JSON NULL,
---    `logs` JSON NULL,
+    `logs` JSON NULL,
     `metadata` JSON NULL
 }}
 

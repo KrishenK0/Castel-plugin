@@ -428,6 +428,33 @@ daily-checks:
     - 15sec
     - 5sec
 
+audit-logs:
+  # Disabled logs
+  disabled: [ ]
+
+  # How long do log datas are kept?
+  # You can either specify their exact name to
+  # have their own expiration time or change the
+  # "default" option for any other logs not specified here.
+  # Of course, the lower the time, the better the
+  # storage, memory and performance.
+  # For performance purposes, the expiration value
+  # cannot be lower than one hour.
+  expiration:
+    default: 30 days
+    guild-join: 10 days
+    guild-leave: 10 days
+    extractor-collect: 5 days
+    warppad-teleport: 3 days
+    guild-invite: 7 days
+    guild-resource-points-convert: 20seconds
+
+    rank-change-name: 7 days
+    rank-change-color: 7 days
+    rank-change-symbol: 7 days
+    rank-change-priority: 10 days
+    rank-change-material: 7 days
+
 tax:
   guilds:
     enabled: false

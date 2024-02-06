@@ -3,6 +3,7 @@ package fr.krishenk.castel.data.handlers;
 import fr.krishenk.castel.abstraction.ImmutableLocation;
 import fr.krishenk.castel.constants.group.Guild;
 import fr.krishenk.castel.constants.group.model.InviteCode;
+import fr.krishenk.castel.constants.group.model.logs.AuditLog;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelation;
 import fr.krishenk.castel.constants.group.model.relationships.GuildRelationshipRequest;
 import fr.krishenk.castel.constants.group.model.relationships.RelationAttribute;
@@ -143,9 +144,9 @@ public class DataHandlerGuild extends DataHandler<UUID, Guild> {
         Map<UUID, Long> challenges = provider.get("challenges").asMap(new HashMap<>(), DataHandlerGuild::loadChallenges);
         Map<String, InviteCode> inviteCodes = provider.get("inviteCodes").asMap(new HashMap<>(), DataHandlerGuild::loadInviteCodes);
 
-        //LinkedList logs = parent.getLogs();
+        LinkedList<AuditLog> logs = parent.getLogs();
 
-        Guild guild = new Guild(id,leader, name, tag, since, members, ranks,resourcePoints, home, publicHome, color, bank, tax, flag, relationshipRequests, relations, attributes, requiresInvite, mails, permanent,lands,powerups, inviteCodes,challenges, chestItems, lore, pacifist, maxLandsModifier, miscUpgrades);
+        Guild guild = new Guild(id,leader, name, tag, since, members, ranks,resourcePoints, home, publicHome, color, bank, tax, flag, relationshipRequests, relations, attributes, requiresInvite, mails, permanent,logs,lands,powerups, inviteCodes,challenges, chestItems, lore, pacifist, maxLandsModifier, miscUpgrades);
         DataHandlerMetadata.deserializeMetadata(provider, guild);
         return guild;
     }
