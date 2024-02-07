@@ -2,8 +2,11 @@ package fr.krishenk.castel.utils;
 
 import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.constants.group.Guild;
+import fr.krishenk.castel.constants.group.model.logs.AuditLog;
+import fr.krishenk.castel.constants.group.model.logs.misc.bank.LogGuildBankChange;
 import fr.krishenk.castel.constants.player.CastelPlayer;
 import fr.krishenk.castel.constants.player.GuildInvite;
+import fr.krishenk.castel.data.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -63,6 +66,26 @@ public class PacketUtils {
             return invites;
         }
 
+        public static List<BankLog> getBankLogs(Guild guild) {
+            List<BankLog> list = new ArrayList<>();
+            for (AuditLog x : guild.getLogs()) {
+                if (x instanceof LogGuildBankChange) {
+                    list.add(new BankLog((LogGuildBankChange) x));
+                }
+            }
+            return list;
+        }
     }
 
+    static class BankLog {
+        private String player;
+        private long time;
+        private double amount;
+
+        public BankLog(LogGuildBankChange log) {
+            this.player = log.getPlayer().getOfflinePlayer().getName();
+            this.time = log.getTime();
+            this.amount = log.getAmount();
+        }
+    }
 }

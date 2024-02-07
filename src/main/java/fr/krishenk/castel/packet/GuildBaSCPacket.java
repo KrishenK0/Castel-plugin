@@ -18,6 +18,7 @@ public class GuildBaSCPacket extends NMSPacket {
         packetByteBuffer.writeByte(2);
         packetByteBuffer.writeString(new Gson().toJson(PacketUtils.GUILD.onlinePlayer(guild)));
         packetByteBuffer.writeString(new Gson().toJson(PacketUtils.GUILD.offlinePlayer(guild)));
+        packetByteBuffer.writeString(new Gson().toJson(PacketUtils.GUILD.getBankLogs(guild)));
         this.rawPacket = new PacketPlayOutCustomPayload(new MinecraftKey(CastelPlugin.channel), packetByteBuffer);
     }
 
