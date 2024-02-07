@@ -67,7 +67,7 @@ public class CommandBank extends CastelCommand {
                         return;
                     }
 
-                    guild.addBank(-amount);
+                    guild.addBank(-amount, cp);
                     ServiceVault.deposit(player, amount);
                     Lang.COMMAND_BANK_WITHDRAW_SUCCESS.sendError(player, "amount", amount, "translated", amount, "balance", ServiceVault.getMoney(player));
                 } else if (type.equalsIgnoreCase("deposit")) {
@@ -92,8 +92,8 @@ public class CommandBank extends CastelCommand {
                         Lang.COMMAND_BANK_DEPOSIT_LIMIT.sendMessage(player, "amount", amount, "limit", limit);
                     }
 
-                    guild.addBank(amount);
-                    ServiceVault.withdraw(player, amount);
+                    guild.addBank(amount, cp);
+                    ServiceVault.withdraw(player, -amount);
                     Lang.COMMAND_BANK_DEPOSIT_SUCCESS.sendMessage(player, "amount", amount, "translated", amount, "balance", ServiceVault.getMoney(player));
                 } else {
                     Lang.COMMAND_BANK_UNKNOWN_TRANSACTION.sendMessage(player, "transaction", args[0]);
