@@ -284,8 +284,20 @@ public abstract class Group extends CastelObject<UUID> {
         return members;
     }
 
-    public double addBank(double amount) {
-        return this.bank += amount;
+    public GuildBankChangeEvent addBank(double amount) {
+        return addBank(amount, null);
+    }
+
+    public GuildBankChangeEvent addBank(double amount, CastelPlayer player) {
+        GuildBankChangeEvent event = new GuildBankChangeEvent(amount, player, this);
+        if (amount == 0) {
+            event.setCancelled(true);
+            return event;
+        }
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return event;
+        this.bank += amount;
+        return event;
     }
 
     public int countRelationships(GuildRelation relation) {
@@ -469,10 +481,10 @@ public abstract class Group extends CastelObject<UUID> {
     public <C extends AuditLog, T> T getNewestLog(final Class<C> base, final Function<C, T> transformer) {
         final Iterator<AuditLog> descending = this.logs.descendingIterator();
         while (descending.hasNext()) {
-            final AuditLog log = descending.next();
-            if (!base.isInstance(log)) continue;
-            final T result = transformer.apply((C) log);
-            if (result != null) return result;
+            T result;
+            AuditLog next = descending.next();
+            if (!base.isInstance(next) || (result = transformer.apply((C) next)) != null) continue;
+            return result;
         }
         return null;
     }

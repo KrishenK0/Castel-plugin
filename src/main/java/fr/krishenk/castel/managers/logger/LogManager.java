@@ -2,15 +2,10 @@ package fr.krishenk.castel.managers.logger;
 
 import fr.krishenk.castel.constants.group.Group;
 import fr.krishenk.castel.constants.group.Guild;
-import fr.krishenk.castel.constants.group.model.logs.LogGuildInvite;
-import fr.krishenk.castel.constants.group.model.logs.LogGuildLeaderChange;
-import fr.krishenk.castel.constants.group.model.logs.LogGuildPacifismStateChange;
 import fr.krishenk.castel.constants.group.model.logs.lands.LogGuildClaim;
 import fr.krishenk.castel.constants.group.model.logs.lands.LogGuildUnclaim;
-import fr.krishenk.castel.constants.group.model.logs.misc.LogGroupServerTaxPay;
-import fr.krishenk.castel.constants.group.model.logs.misc.LogGuildJoin;
-import fr.krishenk.castel.constants.group.model.logs.misc.LogGuildLeave;
-import fr.krishenk.castel.constants.group.model.logs.misc.LogGuildResourcePointsConvert;
+import fr.krishenk.castel.constants.group.model.logs.misc.*;
+import fr.krishenk.castel.constants.group.model.logs.misc.bank.LogGuildBankChange;
 import fr.krishenk.castel.constants.group.model.logs.misc.ranks.*;
 import fr.krishenk.castel.constants.group.model.logs.misc.renames.LogGuildChangeLore;
 import fr.krishenk.castel.constants.group.model.logs.misc.renames.LogGuildChangeTag;
@@ -191,5 +186,15 @@ public class LogManager implements Listener {
         Group group = event.getGroup();
         if (!(group instanceof Guild)) return;
         group.log(new LogGroupServerTaxPay(event.getAmount()));
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onGroupBankChange(GuildBankChangeEvent event) {
+        Group group = event.getGroup();
+        CastelPlayer cp = event.getPlayer();
+        if (!(group instanceof Guild) || cp == null) return;
+        System.out.println(event.getOldBank());
+        System.out.println(event.getNewBank());
+        group.log(new LogGuildBankChange(cp.getUUID(), event.getOldBank(), event.getNewBank()));
     }
 }
