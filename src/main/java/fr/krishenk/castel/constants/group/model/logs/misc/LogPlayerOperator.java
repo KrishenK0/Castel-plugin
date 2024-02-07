@@ -2,12 +2,15 @@ package fr.krishenk.castel.constants.group.model.logs.misc;
 
 import fr.krishenk.castel.abstraction.PlayerOperator;
 import fr.krishenk.castel.constants.group.model.logs.AuditLog;
+import fr.krishenk.castel.constants.land.DeserializationContext;
 import fr.krishenk.castel.constants.land.SerializationContext;
 import fr.krishenk.castel.constants.player.CastelPlayer;
+import fr.krishenk.castel.data.dataproviders.SectionableDataGetter;
 import fr.krishenk.castel.data.dataproviders.SectionableDataSetter;
 import fr.krishenk.castel.locale.provider.MessageBuilder;
 import org.bukkit.Bukkit;
 
+import java.sql.SQLException;
 import java.util.UUID;
 
 public abstract class LogPlayerOperator extends AuditLog implements PlayerOperator {
@@ -18,6 +21,12 @@ public abstract class LogPlayerOperator extends AuditLog implements PlayerOperat
 
     public LogPlayerOperator(UUID player) {
         this.player = player;
+    }
+
+    @Override
+    public void deserialize(DeserializationContext<SectionableDataGetter> context) throws SQLException {
+        super.deserialize(context);
+        this.player = context.getDataProvider().get("player").asUUID();
     }
 
     @Override
