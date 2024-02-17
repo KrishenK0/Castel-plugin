@@ -3,6 +3,7 @@ package fr.krishenk.castel.utils;
 import fr.krishenk.castel.CastelPlugin;
 import fr.krishenk.castel.constants.group.Guild;
 import fr.krishenk.castel.constants.player.CastelPlayer;
+import fr.krishenk.castel.constants.player.StandardGuildPermission;
 import fr.krishenk.castel.packet.*;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -106,6 +107,10 @@ public class PacketReader {
                 case "perm":
                     if (guild.getLeader() != cPlayer) return;
                     packet2 = new GuildPeSCPacket(guild);
+                    break;
+                case "claims":
+                    if (!cPlayer.hasPermission(StandardGuildPermission.CLAIM)) return;
+                    packet2 = new GuildClSCPacket(cPlayer, guild);
                     break;
             }
         } else if (command.equals("update-faction")) {

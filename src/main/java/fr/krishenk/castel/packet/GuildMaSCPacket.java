@@ -45,6 +45,7 @@ public class GuildMaSCPacket extends NMSPacket {
         packetByteBuffer.writeBoolean(group.isHidden());
         packetByteBuffer.writeString(new Gson().toJson(group.getMails()));
 //        Set<SimpleChunkLocation> lands;
+        packetByteBuffer.writeString(new Gson().toJson(guild.getLandLocations()));
 //        Map<Guild.Powerup, Integer> powerups;
 //        Map<Guild.MiscUpgrade, Integer> miscUpgrades;
 //        Map<String, Guild.InviteCode> inviteCodes;
