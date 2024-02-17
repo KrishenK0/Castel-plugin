@@ -27,8 +27,8 @@ public class CommandUnclaimAuto extends CastelCommand {
             if (!cp.hasPermission(StandardGuildPermission.UNCLAIM)) {
                 StandardGuildPermission.UNCLAIM.sendDeniedMessage(target);
             } else {
-                boolean wasAutoClaiming = cp.getAutoClaim();
-                cp.setAutoClaim(!wasAutoClaiming);
+                boolean wasAutoClaiming = cp.getAutoClaim() == Boolean.FALSE;
+                cp.setAutoClaim(wasAutoClaiming ? null : Boolean.FALSE);
                 Lang activation = wasAutoClaiming ? Lang.COMMAND_UNCLAIM_AUTO_OFF : Lang.COMMAND_UNCLAIM_AUTO_ON;
                 activation.sendMessage(target);
                 if (wasAutoClaiming) {

@@ -35,7 +35,7 @@ public class StringTree {
         this.entryColor = StringTree.getOrEmpty(this.style.getColors(), TreeColorScheme.ENTRIES);
         this.separator = this.style.getCharacters().getOrDefault(TreeTokenType.INDICATOR_PATH_SEPARATOR, "/");
         this.separatorColor = StringTree.getOrEmpty(this.style.getColors(), TreeColorScheme.PATH_SEPARATORS);
-        this.lines = new ArrayList(10);
+        this.lines = new ArrayList<>(10);
         this.currentBuilder = new StringBuilder(100);
         if (this.style.getFlatten()) {
             this.root = this.flatten(this.root);
@@ -112,7 +112,7 @@ public class StringTree {
     }
 
     public final void newLine() {
-        int var1 = this.linePosition++;
+        this.linePosition++;
         if (this.linePosition == this.lines.size()) {
             this.currentBuilder = new StringBuilder(this.currentBuilder.length());
             this.lines.add(this.currentBuilder);

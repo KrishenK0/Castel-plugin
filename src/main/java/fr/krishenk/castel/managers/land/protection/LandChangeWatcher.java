@@ -50,6 +50,7 @@ public class LandChangeWatcher implements Listener {
                CastelPlayer cp = CastelPlayer.getCastelPlayer(player);
                Guild guild = cp.getGuild();
                MiscUpgradeManager.onEnemyEnterAlert(event);
+               AutoClaimManager.autoUnclaim(event, guild, cp);
                AutoClaimManager.autoClaim(event, guild, cp);
                if (cp.isAutoMap()) cp.buildMap().display();
 

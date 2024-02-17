@@ -90,18 +90,17 @@ public class CommandClaimAuto extends CastelCommand {
             if (!cp.hasPermission(StandardGuildPermission.CLAIM)) {
                 StandardGuildPermission.CLAIM.sendDeniedMessage(target);
             } else {
-                boolean wasAutoClaiming = cp.getAutoClaim();
-                cp.setAutoClaim(!wasAutoClaiming);
+                boolean wasAutoClaiming = cp.getAutoClaim() == Boolean.TRUE;
+                cp.setAutoClaim(wasAutoClaiming ? null : Boolean.TRUE);
                 Lang activation = wasAutoClaiming ? Lang.COMMAND_CLAIM_AUTO_OFF : Lang.COMMAND_CLAIM_AUTO_ON;
-                activation.sendError(target);
+                activation.sendMessage(target);
                 if (wasAutoClaiming) {
-                    if (cancelActionBar(target)) {
+                    if (CommandClaimAuto.cancelActionBar(target))
                         Lang.AUTO_CLAIM_ACTIONBAR_DISABLED.sendMessage(target);
-                    }
                 } else {
-                    cancelActionBar(target);
+                    CommandClaimAuto.cancelActionBar(target);
                     if (Config.Claims.ACTIONBAR_AUTO_CLAIM.getManager().getBoolean()) {
-                        actionBar(target, Lang.AUTO_CLAIM_ACTIONBAR_ENABLED);
+                        CommandClaimAuto.actionBar(target, Lang.AUTO_CLAIM_ACTIONBAR_ENABLED);
                     }
                 }
             }

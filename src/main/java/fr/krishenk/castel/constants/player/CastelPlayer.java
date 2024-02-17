@@ -59,7 +59,7 @@ public class CastelPlayer extends CastelObject<UUID> implements Comparable<Caste
     private double power;
     private long lastPowerCheckup;
     private Pair<Integer, Integer> mapSize;
-    private Boolean autoClaim;
+    private transient Boolean autoClaim;
     private long totalDonations;
     private long lastDonationTime;
     private long lastDonationAmount;

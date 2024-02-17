@@ -22,8 +22,8 @@ public class TreeBuilder {
     private ContainerPrinter parseContainer(String key, Map<String, List<String>> map) {
         ContainerPrinter root = new ContainerPrinter(key);
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
-            Object k = entry.getKey();
-            Object v = entry.getValue();
+            String k = entry.getKey();
+            List<String> v = entry.getValue();
             if (v instanceof Map) {
                 List<EntryPrinter> children = root.getChildren();
                 children.add(this.parseContainer(k.toString(), (Map<String, List<String>>) v));
@@ -33,7 +33,7 @@ public class TreeBuilder {
                 }
 
                 ContainerPrinter childEntry = new ContainerPrinter(k.toString());
-                for (List<Object> element : (Iterable<List<Object>>) v) {
+                for (String element : v) {
                     childEntry.getChildren().add(new StringPrinter(String.valueOf(element)));
                 }
                 root.getChildren().add(childEntry);

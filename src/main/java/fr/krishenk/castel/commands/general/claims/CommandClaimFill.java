@@ -77,11 +77,7 @@ public class CommandClaimFill extends CastelCommand {
                 int rankMaxClaims = cp.getRank().getMaxClaims();
                 int guildMaxClaims = guild.getMaxClaims(mainChunk.getWorld());
                 int leftKingdomClaims = Math.max(0, guildMaxClaims - guild.getLandLocations().size());
-                if (rankMaxClaims > 0) {
-                    this.maxClaims = Math.min(Math.max(0, rankMaxClaims - cp.getClaims().size()), leftKingdomClaims);
-                } else {
-                    this.maxClaims = leftKingdomClaims;
-                }
+                this.maxClaims = (rankMaxClaims > 0) ? Math.min(Math.max(0, rankMaxClaims - cp.getClaims().size()), leftKingdomClaims) : leftKingdomClaims;
             }
 
         }
